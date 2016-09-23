@@ -1,0 +1,427 @@
+- hosts: squid3
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install squid3
+      sudo: yes
+      shell: sudo apt-get install squid3 -y
+
+    - name: /etc/squid3/squid.conf Modification
+      sudo: yes
+      lineinfile: dest=/etc/squid3/squid.conf regexp='^http_port 3128' line='http_port 0.0.0.0:3128'
+
+    - name: /etc/squid3/squid.conf Modification
+      sudo: yes
+      lineinfile: dest=/etc/squid3/squid.conf
+         insertbefore="^acl SSL_ports port 443"
+         line="acl my_network src {{ subnet }}"
+
+    - name: /etc/squid3/squid.conf Modification
+      sudo: yes
+      lineinfile: dest=/etc/squid3/squid.conf
+         insertafter='^http_access allow localhost'
+         line="http_access allow my_network"
+
+    - name: /etc/squid3/squid.conf Modification
+      sudo: yes
+      lineinfile: dest=/etc/squid3/squid.conf
+         insertafter='^# Let operating system decide'
+         line="dns_v4_first on"
+
+    - name: Restart squid3 service
+      sudo: yes
+      shell: service squid3 restart
+
+- hosts: ansible-node
+  gather_facts: true
+  sudo: true
+  vars:
+    path: "{{lookup('pipe', 'pwd')}}"
+  tasks:
+    - name: Script to generate proxy url
+      sudo: yes
+      shell: python {{ path }}/files/proxy.py {{ path }}
+
+- hosts: ansible-node
+  gather_facts: true
+  sudo: true
+  vars:
+    path1: "{{lookup('pipe', 'pwd')}}"
+  tasks:
+    - name: Script to create ntp settings
+      sudo: true
+      command: python {{ path1 }}/files/ntp.py {{ path1 }}
+
+- hosts: allnodes
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Check if all the nodes are reachable
+      sudo: true
+      ping:
+
+    - name: setting proxt client files
+      sudo: yes
+      copy: src=./files/apt.conf dest=/etc/apt/apt.conf
+
+    - name: setting proxt client files
+      sudo: yes
+      copy: src=./files/apt.conf dest=/etc/apt/apt.conf.d/apt.conf
+
+    - name: Update sources.list
+      sudo: true
+      copy: src=./files/sources.list dest=/etc/apt/sources.list
+
+    - name: Update DNS Server Details
+      sudo: true
+      copy: src=./files/resolv.conf dest=/etc/resolv.conf
+
+    - name: Update DNS Server Details
+      sudo: true
+      shell: rm /etc/resolv.conf
+
+    - name: Update DNS Server Details
+      sudo: true
+      shell: ln -s /run/resolvconf/resolv.conf /etc/resolv.conf
+
+    - name: apt-get update
+      sudo: true
+      shell: apt-get update
+
+    - name: Install NTP daemon
+      sudo: true
+      apt: pkg=ntp state=present force=yes
+
+    - name: Install NTP daemon
+      sudo: true
+      shell: apt-get install ntp -y
+
+    - name: Setup NTP daemon config file
+      sudo: true
+      copy: src=./files/ntp_client.conf dest=/etc/ntp.conf
+
+#    - name: setting proxt client files
+#      sudo: yes
+#      copy: src=./files/apt.conf dest=/etc/apt/apt.conf
+
+#    - name: setting proxt client files
+#      sudo: yes
+#      copy: src=./files/apt.conf dest=/etc/apt/apt.conf.d/apt.conf
+
+    - name: Update cluster node hostnames
+      sudo: true
+      copy: src=./files/hosts dest=/etc/hosts
+  
+    - name: Procerros validation
+      sudo: true
+      shell: uname -m
+      register: uname
+
+    - name: Processor check
+      fail: msg="Mapr installation is not supported on this processor"
+      when: " 'x86_64' not  in  uname.stdout"
+       
+    - name: OS name
+      sudo: true
+      shell: lsb_release -si
+      register: os_name
+
+    - name: OS version
+      sudo: true
+      shell: lsb_release -sr
+      register: os_version
+
+    - name: OS check
+      fail: msg="Mapr installation is not supported on this OS"
+      when: " 'Ubuntu' not  in os_name.stdout" 
+
+    - name: OS check
+      fail: msg="Mapr installation is not supported on this OS version"
+      when: os_version.stdout < "12.04"
+
+    - name: Memory test
+      sudo: true
+      shell: free -g| grep Mem | awk '{print $4}'
+      register: memory
+
+    - name : Dump acl output on console
+      debug: var=memory
+ 
+    - name: Memory checking
+      fail: msg="Mapr installation is not supported on this RAM"
+      when: memory.stdout > "8"
+
+    - name: Dhcp configuration
+      sudo: true
+      lineinfile: dest=/etc/dhcp/dhclient.conf
+          insertbefore='^#retry 60'
+          line="timeout 30;"
+
+    - name: Get interface list
+      sudo: true
+      shell: ifconfig -a | sed 's/[ \t].*//;/^\(lo\|\)$/d'
+      register: data
+
+    - name: Interfaces up
+      sudo: true
+      shell: ifconfig {{ item }} up
+      with_items: data.stdout_lines
+
+    - name: Searching for DHCP ip
+      sudo: true
+      shell: dhclient {{ item }}
+      with_items: data.stdout_lines
+
+#    - name: Delete default route
+#      sudo: true
+#      shell: ip route del default
+
+#    - name: Add default route
+#      sudo: true
+#      shell: ip route add default via  172.31.216.1
+
+#    - name: Install NTP daemon
+#      sudo: true
+#      apt: pkg=ntp state=present force=yes
+
+#    - name: Install NTP daemon
+#      sudo: true
+#      shell: apt-get install ntp -y
+
+#    - name: Setup NTP daemon config file
+#      sudo: true
+#      copy: src=./files/ntp_client.conf dest=/etc/ntp.conf
+
+#    - name: Ensure NTP daemon restart and autostart
+#      sudo: true
+#      service: name=ntp enabled=yes state=restarted
+
+#    - name: Ensure NTP clients syncs with timeserver
+#      sudo: true
+#      shell: ntpdate -u 172.31.219.94
+
+#----------
+
+#    - name: Generate configure.sh script
+#      sudo: true
+#      copy: src=./ntp.sh dest=/tmp/ntp.sh
+
+#    - name: Configure the node
+#      sudo: true
+#      shell: /tmp/ntp.sh
+
+
+
+#--------------------------
+ 
+    - name: Install LLDPD daemon
+      sudo: true
+      shell: apt-get install lldpd -y
+
+    - name: Setup failsafe timer ( for quick bootup )
+      sudo: true
+      copy: src=./files/failsafe.conf dest=/etc/init/failsafe.conf
+
+    - name: Update sources.list
+      sudo: true
+      copy: src=./files/sources.list dest=/etc/apt/sources.list
+
+#    - name: Update DNS Server Details
+#      sudo: true
+#      copy: src=./files/resolv.conf dest=/etc/resolv.conf
+
+    - name: Update DNS Server Details
+      sudo: true
+      copy: src=./files/resolv.conf dest=/etc/resolvconf/resolv.conf.d/base
+
+    - name: mapr key
+      sudo: true
+      shell: wget -O - http://package.mapr.com/releases/pub/maprgpg.key | sudo apt-key add -
+
+    - name: Perform apt-get update
+      sudo: true
+      apt: update_cache=yes
+
+    - name: Jdk installation
+      sudo: true
+      apt: pkg=openjdk-7-jdk state=present
+
+    - name: Jre installation
+      sudo: true
+      apt: pkg=openjdk-7-jre state=present
+
+    - name: Fix to correct dpkg itself
+      sudo: true
+      shell: dpkg --configure -a
+
+    - name: Install libssl-dev service
+      sudo: true
+      apt: pkg=libssl-dev state=present
+
+    - name: Install rsyslog-gnutls service
+      sudo: true
+      apt: pkg=rsyslog-gnutls state=present
+
+    - name: Ensure rsyslog service is running
+      sudo: true
+      service: name=rsyslog state=running
+      
+    - name: Add mapr group
+      sudo: true
+      shell: groupadd -g 5000 mapr
+
+    - name: Add mapr user
+      sudo: true
+      shell: useradd -g 5000 -u 5000 -m -s /bin/bash mapr 
+
+    - name: Creating mapr user password
+      user: name=mapr password=$6$rounds=40000$ESoUcReB7ntJ/Fmv$SBWwa5.pRHhP8ZYu4isGSrYJkCHtuYbQyY9Hz4/HWoXclnmwYQLh/02BPig8eEjYNUDmpJu31j0zL.f.IgHd7/
+
+    - name: Creating root user password
+      user: name=root password=$6$rounds=40000$RaQSqbvQdX5rPD/h$4Q3BAgGNwug9Uao5DRO.7v6a5wwk4ooRHyFtwe9DDXzDEpLtk5sUOMJgUi792Zs7kZHR.b4CZx78U6PBziSKS0
+
+    #Node pre-requisites
+    # Ensure default mask for root user is 0022 - /etc/.profile or /etc/.cshrc or /etc/.login
+    - name: Ensure default mask for root user is 0022
+      sudo: true
+      command: echo "umask 022" >> /etc/.profile
+
+    - name: MApr .ssh directory craetion.
+      sudo: true
+      shell: mkdir /home/mapr/.ssh
+
+    - name: MApr .ssh directory craetion.
+      sudo: true
+      shell: chmod 777 /home/mapr/.ssh
+
+    # MapR does not recommend using overcommit
+    - name: Update file /etc/sysctl.conf
+      sudo: true
+      shell: echo "vm.overcommit_memory=0" >> /etc/sysctl.conf
+
+    - name: Update configuration
+      sudo: true
+      shell: sysctl -p
+
+    # Configure TCP retries
+    - name: Update file /etc/sysctl.conf
+      sudo: true
+      shell: echo "net.ipv4.tcp_retries2=5" >> /etc/sysctl.conf
+
+    - name: Update TCP Retries Configuration
+      sudo: true
+      shell: sysctl -p
+
+    # MapR recommends disabling the Transparent Huge Pages (THP) feature in the Linux kernel
+    - name: Disabling the Transparent Huge Pages (THP) feature
+      sudo: true
+      shell: echo "never" > /sys/kernel/mm/transparent_hugepage/defrag
+
+    # Configure ulimit ( ulimit -n ) to 64000
+    - name: configure ulimit
+      sudo: true
+      shell: ulimit -n 64000
+
+    - name: Install coreutils 
+      sudo: true
+      apt: pkg=coreutils state=present
+
+    - name: Install dmidecode
+      sudo: true
+      apt: pkg=dmidecode state=present
+
+    - name: Install dpkg-repack
+      sudo: true
+      apt: pkg=dpkg-repack state=present
+
+    - name: Install dhparm
+      sudo: true
+      apt: pkg=hdparm state=present
+
+    - name: Install iputils-arping
+      sudo: true
+      apt: pkg=iputils-arping state=present
+
+    - name: Install irqbalance
+      sudo: true
+      apt: pkg=irqbalance state=present
+
+    - name: Install libc6
+      sudo: true
+      apt: pkg=libc6 state=present
+
+    - name: Install libgcc1
+      sudo: true
+      apt: pkg=libgcc1 state=present
+
+    - name: Install libstdc++6
+      sudo: true
+      apt: pkg=libstdc++6 state=present
+
+    - name: Install lsb-base
+      sudo: true
+      apt: pkg=lsb-base state=present
+ 
+    - name: Install nfs-common
+      sudo: true
+      apt: pkg=nfs-common state=present
+
+    - name: Install perl
+      sudo: true
+      apt: pkg=perl state=present
+
+    - name: Install procps
+      sudo: true
+      apt: pkg=procps state=present
+
+    - name: Install sdparm
+      sudo: true
+      apt: pkg=sdparm state=present
+
+    - name: Install sed
+      sudo: true
+      apt: pkg=sed state=present
+
+    - name: Install syslinux
+      sudo: true
+      apt: pkg=syslinux state=present
+
+    - name: Install sysvinit-utils 
+      sudo: true
+      apt: pkg=sysvinit-utils state=present
+
+    - name: Install unzip
+      sudo: true
+      apt: pkg=unzip state=present
+
+    - name: Install Zip
+      sudo: true
+      apt: pkg=zip state=present
+
+- hosts: ntp-server
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Setup NTP daemon config file
+      sudo: true
+      copy: src=./files/ntp_server.conf dest=/etc/ntp.conf
+
+    - name: Ensure NTP daemon restart and autostart
+      sudo: true
+      service: name=ntp enabled=yes state=restarted
+
+- hosts: allnodes
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Ensure NTP daemon restart and autostart
+      sudo: true
+      service: name=ntp enabled=yes state=restarted
+
+    - name: Ensure NTP daemon restart and autostart
+      sudo: true
+      copy: src=./files/ntp_sync.sh dest=/tmp/ntp_sync.sh
+
+    - name: Ensure NTP daemon restart and autostart
+      sudo: true
+      shell: /tmp/ntp_sync.sh

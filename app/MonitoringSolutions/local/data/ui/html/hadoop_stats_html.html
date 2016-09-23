@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Hadoop Stats View</title>
+    <link rel="shortcut icon" href="{{SPLUNKWEB_URL_PREFIX}}/static/img/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="{{SPLUNKWEB_URL_PREFIX}}/static/css/build/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{SPLUNKWEB_URL_PREFIX}}/static/css/build/pages/dashboard-simple-bootstrap.min.css" />
+ <style>
+ .app-link .app-logo{
+    float:right !important;
+    padding-left:10px;
+    }
+    .app-link .app-name{
+    	display:block !important;
+    }
+#formCustomerInfo .input-text,.form-submit{
+clear:both;
+display:block !important;
+}
+#formCustomerInfo .fieldset .input{
+display:block !important;
+width:auto !important;
+}
+#formCustomerInfo .splunk-view label:first-child{
+   float: left;
+width: 150px;
+}
+#formCustomerInfo .splunk-view .splunk-textinput{
+float:left;
+}
+</style>
+  </head>
+<body class="simplexml preload locale-en">
+<!-- 
+BEGIN LAYOUT
+This section contains the layout for the dashboard. Splunk uses proprietary
+styles in <div> tags, similar to Bootstrap's grid system. 
+-->
+<a class="navSkip" href="#navSkip" tabindex="1">Screen reader users, click here to skip the navigation bar</a>
+<div class="header splunk-header">
+        <div id="placeholder-splunk-bar">
+            <a href="{{SPLUNKWEB_URL_PREFIX}}/app/launcher/home" class="brand" title="splunk &gt; listen to your data">splunk<strong>&gt;</strong></a>
+        </div>
+            <div id="placeholder-app-bar"></div>
+</div>
+<a id="navSkip"></a>
+<div class="dashboard-body container-fluid main-section-body" data-role="main">
+    <div class="dashboard-header clearfix">
+        <h2>Hadoop View for <span id="jobTag"></span> </h2>
+      
+    <script type="text/javascript">
+            var tagName = localStorage.getItem('jobTagName');
+            document.getElementById('jobTag').innerText = tagName;
+</script>
+    </div>
+
+
+    <div id="row1" class="dashboard-row dashboard-row1">
+        <div id="panel1" class="dashboard-cell" style="width: 100%;">
+            <div class="dashboard-panel clearfix">
+                <h2 class="panel-title">Cluster Stats</h2>
+                
+                <div class="panel-element-row">
+                    <div id="element1" class="dashboard-element table" style="width: 100%">
+                        <div class="panel-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="row2" class="dashboard-row dashboard-row2">
+        <div id="panel2" class="dashboard-cell" style="width: 100%;">
+            <div class="dashboard-panel clearfix">
+              <h2 class="panel-title">Application/Job Stats</h2>
+                
+                <div class="panel-element-row">
+                    <div id="element2" class="dashboard-element table" style="width: 100%">
+                        <div class="panel-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="row3" class="dashboard-row dashboard-row3">
+        <div id="panel3" class="dashboard-cell" style="width: 100%;">
+            <div class="dashboard-panel clearfix">
+                <h2 class="panel-title">Maps Stats</h2>
+                
+                <div class="panel-element-row">
+                    <div id="element3" class="dashboard-element chart" style="width: 100%">
+                        <div class="panel-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="row4" class="dashboard-row dashboard-row4">
+        <div id="panel4" class="dashboard-cell" style="width: 100%;">
+            <div class="dashboard-panel clearfix">
+                <h2 class="panel-title">Reduces Stats</h2>
+                
+                <div class="panel-element-row">
+                    <div id="element4" class="dashboard-element chart" style="width: 100%">
+                        <div class="panel-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer"></div>
+
+<!-- 
+END LAYOUT
+-->
+
+<script src="{{SPLUNKWEB_URL_PREFIX}}/config?autoload=1"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/static/js/i18n.js"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/i18ncatalog?autoload=1"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/static/js/build/simplexml.min/config.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+require.config({
+    baseUrl: "{{SPLUNKWEB_URL_PREFIX}}/static/js",
+    waitSeconds: 0 // Disable require.js load timeout
+});
+
+//
+// LIBRARY REQUIREMENTS
+//
+// In the require function, we include the necessary libraries and modules for
+// the HTML dashboard. Then, we pass variable names for these libraries and
+// modules as function parameters, in order.
+// 
+// When you add libraries or modules, remember to retain this mapping order
+// between the library or module and its function parameter. You can do this by
+// adding to the end of these lists, as shown in the commented examples below.
+
+require([
+    "splunkjs/mvc",
+    "splunkjs/mvc/utils",
+    "splunkjs/mvc/tokenutils",
+    "underscore",
+    "jquery",
+    "splunkjs/mvc/simplexml",
+    "splunkjs/mvc/headerview",
+    "splunkjs/mvc/footerview",
+    "splunkjs/mvc/simplexml/dashboardview",
+    "splunkjs/mvc/simplexml/dashboard/panelref",
+    "splunkjs/mvc/simplexml/element/chart",
+    "splunkjs/mvc/simplexml/element/event",
+    "splunkjs/mvc/simplexml/element/html",
+    "splunkjs/mvc/simplexml/element/list",
+    "splunkjs/mvc/simplexml/element/map",
+    "splunkjs/mvc/simplexml/element/single",
+    "splunkjs/mvc/simplexml/element/table",
+    "splunkjs/mvc/simplexml/element/visualization",
+    "splunkjs/mvc/simpleform/formutils",
+    "splunkjs/mvc/simplexml/eventhandler",
+    "splunkjs/mvc/simplexml/searcheventhandler",
+    "splunkjs/mvc/simpleform/input/dropdown",
+    "splunkjs/mvc/simpleform/input/radiogroup",
+    "splunkjs/mvc/simpleform/input/linklist",
+    "splunkjs/mvc/simpleform/input/multiselect",
+    "splunkjs/mvc/simpleform/input/checkboxgroup",
+    "splunkjs/mvc/simpleform/input/text",
+    "splunkjs/mvc/simpleform/input/timerange",
+    "splunkjs/mvc/simpleform/input/submit",
+    "splunkjs/mvc/searchmanager",
+    "splunkjs/mvc/savedsearchmanager",
+    "splunkjs/mvc/postprocessmanager",
+    "splunkjs/mvc/simplexml/urltokenmodel"
+    // Add comma-separated libraries and modules manually here, for example:
+    // ..."splunkjs/mvc/simplexml/urltokenmodel",
+    // "splunkjs/mvc/tokenforwarder"
+    ],
+    function(
+        mvc,
+        utils,
+        TokenUtils,
+        _,
+        $,
+        DashboardController,
+        HeaderView,
+        FooterView,
+        Dashboard,
+        PanelRef,
+        ChartElement,
+        EventElement,
+        HtmlElement,
+        ListElement,
+        MapElement,
+        SingleElement,
+        TableElement,
+        VisualizationElement,
+        FormUtils,
+        EventHandler,
+        SearchEventHandler,
+        DropdownInput,
+        RadioGroupInput,
+        LinkListInput,
+        MultiSelectInput,
+        CheckboxGroupInput,
+        TextInput,
+        TimeRangeInput,
+        SubmitButton,
+        SearchManager,
+        SavedSearchManager,
+        PostProcessManager,
+        UrlTokenModel
+
+        // Add comma-separated parameter names here, for example: 
+        // ...UrlTokenModel, 
+        // TokenForwarder
+        ) {
+
+        var pageLoading = true;
+
+
+        // 
+        // TOKENS
+        //
+        
+        // Create token namespaces
+        var urlTokenModel = new UrlTokenModel();
+        mvc.Components.registerInstance('url', urlTokenModel);
+        var defaultTokenModel = mvc.Components.getInstance('default', {create: true});
+        var submittedTokenModel = mvc.Components.getInstance('submitted', {create: true});
+
+        urlTokenModel.on('url:navigate', function() {
+            defaultTokenModel.set(urlTokenModel.toJSON());
+            if (!_.isEmpty(urlTokenModel.toJSON()) && !_.all(urlTokenModel.toJSON(), _.isUndefined)) {
+                submitTokens();
+            } else {
+                submittedTokenModel.clear();
+            }
+        });
+
+        // Initialize tokens
+        defaultTokenModel.set(urlTokenModel.toJSON());
+
+        function submitTokens() {
+            // Copy the contents of the defaultTokenModel to the submittedTokenModel and urlTokenModel
+            FormUtils.submitForm({ replaceState: pageLoading });
+        }
+
+        function setToken(name, value) {
+            defaultTokenModel.set(name, value);
+            submittedTokenModel.set(name, value);
+        }
+
+        function unsetToken(name) {
+            defaultTokenModel.unset(name);
+            submittedTokenModel.unset(name);
+        }
+
+        
+        
+        //
+        // SEARCH MANAGERS
+        //
+
+        var search1 = new SearchManager({
+            "id": "search1",
+            "status_buckets": 0,
+            "latest_time": "$latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "0",
+            "sample_ratio": null,
+            "search": "sourcetype=server_stats plugin=hadoop_static_data JobTagName=$JobTagName$ |table cluster_id cluster_state cluster_hadoopVersion total_cluster_nodes error_nodes Configured_Total_Data_Nodes Configured_Total_RM_Nodes Configured_Total_Yarn_Nodes error_nodes_list Configured_data_nodes_list Configured_resource_manager_list Configured_yarn_nodes_list cluster_size cluster_used_size cluster_available_Size cluster_use_Percentage| rename cluster_id as \"Cluster ID\" cluster_state as \"Cluster State\" cluster_hadoopVersion as \"Hadoop Version\" total_cluster_nodes as \"Total Nodes\" error_nodes as \"Total Error Nodes\" Configured_Total_Data_Nodes as \"Total Data Nodes\" Configured_Total_RM_Nodes as \"Total RM Nodes\" Configured_Total_Yarn_Nodes as \"Total Yarn Nodes\" error_nodes_list as \"Error Nodes List\" Configured_data_nodes_list as \"Data Nodes List\" Configured_resource_manager_list as \"RM Nodes List\" Configured_yarn_nodes_list as \"Yarn Nodes List\" cluster_size as \"Cluster Size (TB)\" cluster_used_size as \"Cluster Used Size (TB)\" cluster_available_Size as \"Cluster Available Size (TB)\" cluster_use_Percentage as \"Cluster Use (%)\" |sort - _time | head 1",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+        var search2 = new SearchManager({
+            "id": "search2",
+            "status_buckets": 0,
+            "latest_time": "$latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "0",
+            "sample_ratio": null,
+            "search": "sourcetype=server_stats plugin=hadoop_dynamic_data job_id=$JobTagID$ |table application_id application_name application_applicationType application_state application_progress application_startedTime application_finishedTime application_elapsedTime job_mapsTotal job_reducesTotal job_mapsCompleted job_mapsPending job_mapsRunning job_mapProgress job_reducesCompleted job_reducesPending job_reducesRunning job_reduceProgress | rename application_id as \"App ID\" application_name as \"App Name\" application_applicationType as \"App Type\" application_state as \"App State\" application_progress as \"App Status\" application_startedTime as \"App Started Time\" application_finishedTime as \"App Finished Time\" application_elapsedTime as \"App Elapsed Time (S)\" job_mapsTotal as \"Total Maps\" job_reducesTotal as \"Total Reduces\" job_mapsCompleted as \"Maps Completed\" job_mapsPending as \"Maps Pending\" job_mapsRunning as \"Maps Running\" job_mapProgress as \"Maps Progress\" job_reducesCompleted as \"Reduces Completed\" job_reducesPending as \"Reduces Pending\" job_reducesRunning as \"Reduces Running\" job_reduceProgress as \"Reduces Progress\" | sort - _time | Head 1",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+        var search3 = new SearchManager({
+            "id": "search3",
+            "status_buckets": 0,
+            "latest_time": "$latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "0",
+            "sample_ratio": null,
+            "search": "sourcetype=server_stats plugin=hadoop_dynamic_data  job_id=$JobTagID$ | timechart values(job_mapsCompleted) as \"Maps Completed\"  values(job_mapsRunning) as \"Maps Running\"  values(job_mapsPending) as \"Maps Pending\" ",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+        var search4 = new SearchManager({
+            "id": "search4",
+            "status_buckets": 0,
+            "latest_time": "$latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "0",
+            "sample_ratio": null,
+            "search": "sourcetype=server_stats plugin=hadoop_dynamic_data  job_id=$JobTagID$ | timechart values(job_reducesCompleted) as \"Reduces Completed\" values(job_reducesRunning) as \"Reduces Running\" values(job_reducesPending) as \"Reduces Pending\" ",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+
+
+        //
+        // SPLUNK HEADER AND FOOTER
+        //
+
+        new HeaderView({
+            id: 'header',
+            section: 'dashboards',
+            el: $('.header'),
+            acceleratedAppNav: true,
+            useSessionStorageCache: true,
+            splunkbar: true,
+            appbar: true,
+            litebar: false,
+        }, {tokens: true}).render();
+
+        new FooterView({
+            id: 'footer',
+            el: $('.footer')
+        }, {tokens: true}).render();
+
+
+        //
+        // DASHBOARD EDITOR
+        //
+
+        new Dashboard({
+            id: 'dashboard',
+            el: $('.dashboard-body'),
+            showTitle: true,
+            editable: true
+        }, {tokens: true}).render();
+
+
+        //
+        // VIEWS: VISUALIZATION ELEMENTS
+        //
+
+        var element1 = new TableElement({
+            "id": "element1",
+            "count": 10,
+            "dataOverlayMode": "none",
+            "drilldown": "cell",
+            "rowNumbers": "false",
+            "wrap": "true",
+            "managerid": "search1",
+            "el": $('#element1')
+        }, {tokens: true, tokenNamespace: "submitted"}).render();
+
+        var element2 = new TableElement({
+            "id": "element2",
+            "count": 10,
+            "dataOverlayMode": "none",
+            "drilldown": "cell",
+            "rowNumbers": "false",
+            "wrap": "true",
+            "managerid": "search2",
+            "el": $('#element2')
+        }, {tokens: true, tokenNamespace: "submitted"}).render();
+
+        var element3 = new ChartElement({
+            "id": "element3",
+            "charting.chart.bubbleMaximumSize": "50",
+            "charting.axisTitleY2.visibility": "visible",
+            "charting.layout.splitSeries": "0",
+            "charting.axisLabelsX.majorLabelStyle.rotation": "0",
+            "charting.axisTitleY.visibility": "visible",
+            "charting.chart.bubbleSizeBy": "area",
+            "charting.chart.style": "shiny",
+            "charting.axisY.scale": "linear",
+            "charting.axisTitleX.visibility": "visible",
+            "charting.legend.placement": "right",
+            "charting.legend.labelStyle.overflowMode": "ellipsisMiddle",
+            "charting.chart.bubbleMinimumSize": "10",
+            "charting.axisLabelsX.majorLabelStyle.overflowMode": "ellipsisNone",
+            "charting.axisX.scale": "linear",
+            "charting.chart.nullValueMode": "connect",
+            "resizable": true,
+            "charting.chart.stackMode": "default",
+            "charting.drilldown": "all",
+            "charting.chart": "line",
+            "charting.layout.splitSeries.allowIndependentYRanges": "0",
+            "charting.chart.showDataLabels": "none",
+            "charting.chart.sliceCollapsingThreshold": "0.01",
+            "charting.axisY2.scale": "inherit",
+            "charting.axisY2.enabled": "0",
+            "managerid": "search3",
+            "el": $('#element3')
+        }, {tokens: true, tokenNamespace: "submitted"}).render();
+
+
+        var element4 = new ChartElement({
+            "id": "element4",
+            "charting.chart.bubbleMaximumSize": "50",
+            "charting.axisTitleY2.visibility": "visible",
+            "charting.layout.splitSeries": "0",
+            "charting.axisLabelsX.majorLabelStyle.rotation": "0",
+            "charting.axisTitleY.visibility": "visible",
+            "charting.chart.bubbleSizeBy": "area",
+            "charting.chart.style": "shiny",
+            "charting.axisY.scale": "linear",
+            "charting.axisTitleX.visibility": "visible",
+            "charting.legend.placement": "right",
+            "charting.legend.labelStyle.overflowMode": "ellipsisMiddle",
+            "charting.chart.bubbleMinimumSize": "10",
+            "charting.axisLabelsX.majorLabelStyle.overflowMode": "ellipsisNone",
+            "charting.axisX.scale": "linear",
+            "charting.chart.nullValueMode": "connect",
+            "resizable": true,
+            "charting.chart.stackMode": "default",
+            "charting.drilldown": "all",
+            "charting.chart": "line",
+            "charting.layout.splitSeries.allowIndependentYRanges": "0",
+            "charting.chart.showDataLabels": "none",
+            "charting.chart.sliceCollapsingThreshold": "0.01",
+            "charting.axisY2.scale": "inherit",
+            "charting.axisY2.enabled": "0",
+            "managerid": "search4",
+            "el": $('#element4')
+        }, {tokens: true, tokenNamespace: "submitted"}).render();
+
+
+        // Initialize time tokens to default
+        if (!defaultTokenModel.has('earliest') && !defaultTokenModel.has('latest')) {
+            defaultTokenModel.set({ earliest: '0', latest: '' });
+        }
+
+        submitTokens();
+
+
+        //
+        // DASHBOARD READY
+        //
+
+        DashboardController.ready();
+        pageLoading = false;
+
+    }
+);
+// ]]>
+</script>
+</body>
+</html>

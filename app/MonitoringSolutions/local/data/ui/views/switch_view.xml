@@ -1,0 +1,284 @@
+<form>
+  <label>Switch Table</label>
+  <fieldset submitButton="false">
+    <input type="dropdown" token="switch_name">
+      <search>
+        <query>type=switch sourcetype=server_stats plugin=interface JobTagName=$JobTagName$ | stats values(subtype) as Switch_Name by subtype | table Switch_Name</query>
+      </search>
+      <fieldForLabel>Switch_Name</fieldForLabel>
+      <fieldForValue>Switch_Name</fieldForValue>
+      <default>Lacrosse-1</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>CDP Neighbors</title>
+      <table>
+        <search>
+          <query>type=switch sourcetype=server_stats subtype=$switch_name$ plugin=interface JobTagName=$JobTagName$ | stats values(subtype) as "Switch" values(instance) as "Local Interface" values(cdp_device_id) as "Neighbor"  values(cdp_port_id) as "Remote Interface" values(cdp_platform_id) as "Platform" by subtype,instance | table Switch,"Local Interface","Neighbor","Remote Interface","Platform"  |
+ appendcols [search type=switch sourcetype=server_stats subtype= $switch_name$ plugin=interface JobTagName=$JobTagName$ | stats values(eth_inbytes) as valueRx by instance, _time | stats earliest(_time) AS Earliest, earliest(valueRx) as start_Rx , latest(_time) AS Latest, latest(valueRx) as end_Rx by instance | eval total = (end_Rx-start_Rx)/(Latest-Earliest) | stats sum(total) as sumtotal by instance | eval Rx_Rate= (sumtotal*8)/1000000 | stats avg(Rx_Rate) as Rx_Rate by instance | eval Rx_Rate = round(Rx_Rate,2) | chart values(Rx_Rate) as "avg(Rx_rate)" by instance ]  | 
+appendcols [search type=switch sourcetype=server_stats subtype=$switch_name$ plugin=interface JobTagName=$JobTagName$ | stats values(eth_outbytes) as valueTx by instance, _time | stats earliest(_time) AS Earliest, earliest(valueTx) as start_Tx , latest(_time) AS Latest, latest(valueTx) as end_Tx by instance | eval total = (end_Tx-start_Tx)/(Latest-Earliest) | stats sum(total) as sumtotal by instance | eval Tx_Rate= (sumtotal*8)/1000000 |  stats avg(Tx_Rate) as Tx_Rate by instance | eval Tx_Rate = round(Tx_Rate,2) | chart values(Tx_Rate) as "avg(Tx_Rate)" by instance]|
+appendcols [search type=switch sourcetype=server_stats subtype=$switch_name$ plugin= interface  JobTagName=$JobTagName$ | stats values(eth_inbytes) as valueRx by instance, _time |streamstats current=f window=1 last(valueRx) as oldRx last(_time) as oldtime by instance | eval total = (valueRx-oldRx)/(_time-oldtime) |eval Rx_Rate=(total*8)/1000000 |eval Rx_Rate = round(Rx_Rate,2) | chart max(Rx_Rate) as "peak_Rx" by instance] | 
+appendcols [search type=switch sourcetype=server_stats subtype=$switch_name$ plugin= interface  JobTagName=$JobTagName$ | stats values(eth_outbytes) as valueRx by instance, _time |streamstats current=f window=1 last(valueRx) as oldRx last(_time) as oldtime by instance | eval total = (valueRx-oldRx)/(_time-oldtime) |eval Rx_Rate=(total*8)/1000000 |eval Rx_Rate = round(Rx_Rate,2)| chart max(Rx_Rate) as "peak_Tx" by instance ]| table Switch,"Local Interface","Neighbor","Remote Interface","Platform","avg(Rx_rate)","avg(Tx_Rate)","peak_Rx","peak_Tx"</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+         /app/search/switch_view?form.switch_name=$click.value$&JobTagName=$JobTagName$&earliest=0&latest=
+          ]]>
+          </link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <title>Nic RX</title>
+      <chart>
+        <title>Mbps</title>
+        <search>
+          <query>type=switch sourcetype=server_stats subtype=$switch_name$ plugin=interface JobTagName=$JobTagName$ | stats values(eth_inbytes) as valueRx by instance, _time | stats earliest(_time) AS Earliest, earliest(valueRx) as start_Rx , latest(_time) AS Latest, latest(valueRx) as end_Rx by instance | eval total = (end_Rx-start_Rx)/(Latest-Earliest) | stats sum(total) as sumtotal by instance | eval Rx_Rate= (sumtotal*8)/1000000 | chart avg(Rx_Rate) by instance</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+         /app/search/switch_view?form.switch_name=$switch_name$&form.instance_name=$click.value$&JobTagName=$JobTagName$&earliest=0&latest=
+          ]]>
+          </link>
+        </drilldown>
+      </chart>
+    </panel>
+    <panel>
+      <title>Nic TX</title>
+      <chart>
+        <title>Mbps</title>
+        <search>
+          <query>type=switch sourcetype=server_stats subtype=$switch_name$ plugin=interface JobTagName=$JobTagName$ | stats values(eth_outbytes) as valueTx by instance, _time | stats earliest(_time) AS Earliest, earliest(valueTx) as start_Tx , latest(_time) AS Latest, latest(valueTx) as end_Tx by instance | eval total = (end_Tx-start_Tx)/(Latest-Earliest) | stats sum(total) as sumtotal by instance | eval Tx_Rate= (sumtotal*8)/1000000 | chart avg(Tx_Rate) by instance</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+         /app/search/switch_view?form.instance_name=$click.value$&switch_name=$switch_name$&JobTagName=$JobTagName$&earliest=0&latest=
+          ]]>
+          </link>
+        </drilldown>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>IN Error</title>
+      <chart>
+        <search>
+          <query>type=switch sourcetype=server_stats subtype=$switch_name$ plugin=interface JobTagName=$JobTagName$ | stats earliest(eth_inerr) AS Earliest, latest(eth_inerr) as Latest by instance| eval in_error = (Latest-Earliest) |chart avg(in_error) by instance</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+         /app/search/switch_view?form.instance_name=$click.value$&switch_name=$switch_name$&JobTagName=$JobTagName$&earliest=0&latest=
+          ]]>
+          </link>
+        </drilldown>
+      </chart>
+    </panel>
+    <panel>
+      <title>OUT Error</title>
+      <chart>
+        <search>
+          <query>type=switch sourcetype=server_stats subtype=$switch_name$ plugin=interface JobTagName=$JobTagName$ | stats earliest(eth_outerr) AS Earliest, latest(eth_outerr) as Latest by instance| eval out_error = (Latest-Earliest) |chart avg(out_error) by instance</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+         /app/search/switch_view?form.instance_name=$click.value$&switch_name=$switch_name$&JobTagName=$JobTagName$&earliest=0&latest=
+          ]]>
+          </link>
+        </drilldown>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>IN Pause</title>
+      <chart>
+        <search>
+          <query>type=switch sourcetype=server_stats subtype=$switch_name$ plugin=interface JobTagName=$JobTagName$ | stats earliest(eth_inpause) AS Earliest, latest(eth_inpause) as Latest by instance| eval in_pause = (Latest-Earliest) |chart avg(in_pause) by instance</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+         /app/search/switch_view?form.instance_name=$click.value$&switch_name=$switch_name$&JobTagName=$JobTagName$&earliest=0&latest=
+          ]]>
+          </link>
+        </drilldown>
+      </chart>
+    </panel>
+    <panel>
+      <title>OUT Pause</title>
+      <chart>
+        <search>
+          <query>type=switch sourcetype=server_stats subtype=$switch_name$ plugin=interface JobTagName=$JobTagName$ | stats earliest(eth_outpause) AS Earliest, latest(eth_outpause) as Latest by instance| eval out_pause = (Latest-Earliest) |chart avg(out_pause) by instance</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+         /app/search/switch_view?form.instance_name=$click.value$&switch_name=$switch_name$&JobTagName=$JobTagName$&earliest=0&latest=
+          ]]>
+          </link>
+        </drilldown>
+      </chart>
+    </panel>
+  </row>
+</form>

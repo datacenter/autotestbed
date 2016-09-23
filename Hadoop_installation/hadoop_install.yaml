@@ -1,0 +1,522 @@
+#To create configure.sh  command
+- hosts: ansible-node
+  gather_facts: true
+  sudo: true
+  vars:
+    path: "{{lookup('pipe', 'pwd')}}"
+  tasks:
+    - name: Script to create configure.sh
+      sudo: true
+      command: python {{ path }}/files/cmd.py {{ cluster_name }} {{ path }}
+
+- hosts: allnodes
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: apt-get update
+      sudo: true
+      shell: apt-get update
+
+    - name: Install dpkg-dev
+      sudo: true
+      shell: apt-get install dpkg-dev -y
+
+    - name: Install apache2
+      sudo: true
+      shell: apt-get install apache2 -y
+
+    - name: Install gawk 
+      sudo: true
+      shell: apt-get install gawk -y
+
+# mapr-jobtracker installation
+- hosts: mapr-jobtracker
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-jobtracker
+      sudo: true
+      shell: apt-get install mapr-jobtracker -y
+
+    - name: Copy ssh keygen script
+      sudo: true
+      copy: src=./files/root_ssh_keygen.sh dest=/tmp/
+
+    - name: Execute ssh keygen script
+      sudo: true
+      shell: /tmp/root_ssh_keygen.sh
+
+    - name: Fetch authorized_key file
+      sudo: true
+      fetch: src=/root/.ssh/id_rsa.pub dest=./files/root_authorized_keys_new flat=yes
+
+    - name: Copy ssh keygen script
+      sudo: true
+      copy: src=./files/mapr_ssh_keygen.sh dest=/tmp/
+
+    - name: Execute ssh keygen script
+      sudo: true
+      shell: /tmp/mapr_ssh_keygen.sh
+
+    - name: Fetch authorized_key file
+      sudo: true
+      fetch: src=/home/mapr/.ssh/id_rsa.pub  dest=./files/mapr_authorized_keys_new flat=yes
+
+# mapr-cldb installation ------------------------------------------------------------
+- hosts: mapr-cldb
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-cldb
+      sudo: true
+      shell: apt-get install mapr-cldb -y
+
+# mapr-zookeeper installation
+- hosts: mapr-zookeeper
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-zookeeper
+      sudo: true
+      shell: apt-get install mapr-zookeeper -y
+
+# mapr-nfs installation
+- hosts: mapr-nfs
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-nfs
+      sudo: true
+      shell: apt-get install mapr-nfs -y
+
+#mapr-webserver installation
+- hosts: mapr-webserver
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-webserver
+      sudo: true
+      shell: apt-get install mapr-webserver -y
+
+# mapr-fileserver installation
+- hosts: mapr-fileserver
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-fileserver
+      sudo: true
+      shell: apt-get install mapr-fileserver -y
+
+# mapr-resourcemanager installation
+- hosts: mapr-resourcemanager
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-resourcemanager
+      sudo: true
+      shell: apt-get install mapr-resourcemanager -y
+
+# mapr-historyserver installation
+- hosts: mapr-historyserver
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-historyserver
+      sudo: true
+      shell: apt-get install mapr-historyserver -y
+
+# mapr-fileserver installation
+#- hosts: mapr-fileserver
+#  gather_facts: true
+#  sudo: true
+#  tasks:
+#    - name: Install mapr-fileserver
+#      sudo: true
+#      shell: apt-get install mapr-fileserver -y
+
+# mapr-nodemanager installation
+- hosts: mapr-nodemanager
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-nodemanager
+      sudo: true
+      shell: apt-get install mapr-nodemanager -y
+
+# mapr-tasktracker installation
+- hosts: mapr-tasktracker
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Install mapr-tasktracker
+      sudo: true
+      shell: apt-get install mapr-tasktracker -y
+
+
+- hosts: allnodes
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Send job tracker root authorized_key file
+      sudo: true
+      copy: src=./files/root_authorized_keys_new dest=/root/.ssh/root_authorized_keys_new
+
+    - name: Add job tracker root authorized_key to existing file
+      sudo: true
+      authorized_key: user=root key="{{ lookup('file', './files/root_authorized_keys_new') }}"
+
+    - name: Send mapr authorized_key file to newnode
+      sudo: true
+      copy: src=./files/mapr_authorized_keys_new dest=/home/mapr/.ssh/mapr_authorized_keys_new
+
+    - name: Add authorized_key to existing file
+      sudo: true
+      authorized_key: user=mapr key="{{ lookup('file', './files/mapr_authorized_keys_new') }}"
+
+    - name: /opt/mapr/conf/env.sh configuration
+      sudo: true
+      lineinfile: dest=/opt/mapr/conf/env.sh
+         insertbefore='^#set JAVA_HOME'
+         line="export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64"
+
+    - name: /opt/mapr/conf/env.sh configuration
+      sudo: true
+      lineinfile: dest=/opt/mapr/conf/env.sh
+         insertbefore='^#set JAVA_HOME'
+         line="export MAPR_HOME=/opt/mapr"
+
+    - name: /opt/mapr/conf/env.sh configuration
+      sudo: true
+      lineinfile: dest=/opt/mapr/conf/env.sh
+         insertbefore='^#set JAVA_HOME'
+         line="export MAPR_SUBNETS={{ subnet }} "
+
+    - name: /opt/mapr/conf/env.sh configuration
+      sudo: true
+      lineinfile: dest=/opt/mapr/conf/env.sh
+         insertbefore='^#set JAVA_HOME'
+         line="export MAPR_USER=mapr"
+
+    - name: /opt/mapr/conf/env.sh configuration
+      sudo: true
+      lineinfile: dest=/opt/mapr/conf/env.sh
+         insertbefore='^#set JAVA_HOME'
+         line="export MAPR_ECOSYSTEM_LOGIN_OPTS=*hybrid*"
+
+    - name: Generate configure.sh script
+      sudo: true
+      copy: src=./files/cmd.sh dest=/tmp/cmd.sh
+
+    - name: Configure the node 
+      sudo: true
+      shell: /tmp/cmd.sh
+
+
+    - name: Disk configuration
+      sudo: true
+      shell: lsblk --noheadings --list | gawk '{if( $6 != "rom" && $3 == 0 ) print $1}' | awk '{print $1}' | cut -c1-3 | uniq -c | awk '{if( $1 == 1) print $2}' |  nl -s /dev/ |  cut -c7-15 > /tmp/disks.txt
+
+#lsblk --noheadings --list | gawk '{if( $6 != "rom") print $1}' | awk '{print $1}' | cut -c1-3 | uniq -c | awk '{if( $1 == 1) print $2}' |  nl -s /dev/ |  cut -c7-15  > /tmp/disks.txt
+
+    - name: Disk configuration
+      sudo: true
+      shell: /opt/mapr/server/disksetup -F /tmp/disks.txt
+
+- hosts: ansible-node
+  gather_facts: true
+  sudo: true
+  vars:
+    path1: "{{lookup('pipe', 'pwd')}}"
+  tasks:
+    - name: Script to add root permisssions
+      sudo: true
+      command: python {{ path1 }}/files/root_permissions.py
+
+
+#----------------------------------------------------------------------------------------------
+
+
+
+#---------------------------------------------------------------------------------------------
+
+- hosts: mapr-zookeeper
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start zookeeper service
+      sudo: true
+      shell: service mapr-zookeeper restart
+
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+    - name: mapr-zookeeper qstatus
+      sudo: true
+      shell: service mapr-zookeeper qstatus
+      register: status7
+
+    - name : mapr-zookeeper qstatus
+      debug: var=status7.stdout
+
+- hosts: mapr-cldb
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+    - pause: minutes=3
+
+    - name: mapr-cldb status
+      sudo: true
+      shell: service mapr-cldb status
+      register: status1
+
+    - name : mapr-cldb status
+      debug: var=status1.stdout
+
+
+#- hosts: mapr-zookeeper
+#  gather_facts: true
+#  sudo: true
+#  tasks:
+#    - name: Start zookeeper service
+#      sudo: true
+#      shell: service mapr-zookeeper restart
+
+#    - name: Start warden service
+#      sudo: true
+#      shell: service mapr-warden restart
+
+#    - name: mapr-warden status
+#      sudo: true
+#      shell: service mapr-warden status
+#      register: status
+
+#    - name : mapr-warden status
+#      debug: var=status.stdout
+
+#    - name: mapr-zookeeper qstatus
+#      sudo: true
+#      shell: service mapr-zookeeper qstatus
+#      register: status7
+
+#    - name : mapr-zookeeper qstatus
+#      debug: var=status7.stdout
+
+- hosts: mapr-nfs
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+#    - name: mapr-nfsserver status
+#      sudo: true
+#      shell: service mapr-nfsserver status
+#      register: status5
+
+#    - name : mapr-nfsserver status
+#      debug: var=status5.stdout
+
+
+- hosts: mapr-webserver
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+- hosts: mapr-fileserver
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+#    - name: mapr-nfsserver status
+#      sudo: true
+#      shell: service mapr-nfsserver status
+#      register: status5
+
+#    - name : mapr-nfsserver status
+#      debug: var=status5.stdout
+
+- hosts: mapr-jobtracker
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+- hosts: mapr-resourcemanager
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+- hosts: mapr-historyserver
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+- hosts: mapr-nodemanager
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+    - pause: minutes=3
+
+    - name: mapr-mfs status
+      sudo: true
+      shell: service mapr-mfs status
+      register: status4
+
+    - name : mapr-mfs status
+      debug: var=status4.stdout
+
+
+- hosts: mapr-tasktracker
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+    - pause: minutes=3
+
+    - name: mapr-mfs status
+      sudo: true
+      shell: service mapr-mfs status
+      register: status4
+
+    - name : mapr-mfs status
+      debug: var=status4.stdout
+
+
+- hosts: mapr-fileserver
+  gather_facts: true
+  sudo: true
+  tasks:
+    - name: Start warden service
+      sudo: true
+      shell: service mapr-warden restart
+
+    - name: mapr-warden status
+      sudo: true
+      shell: service mapr-warden status
+      register: status
+
+    - name : mapr-warden status
+      debug: var=status.stdout
+
+    - pause: minutes=3
+
+    - name: mapr-mfs status
+      sudo: true
+      shell: service mapr-mfs status
+      register: status4
+
+    - name : mapr-mfs status
+      debug: var=status4.stdout
+
+
+
+
+
+

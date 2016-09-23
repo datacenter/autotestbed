@@ -1,0 +1,107 @@
+<dashboard>
+  <label>Hadoop Stats</label>
+  <row>
+    <panel>
+      <title>Static</title>
+      <table>
+        <search>
+          <query>sourcetype=server_stats plugin=hadoop_static_data |table cluster_id cluster_state cluster_hadoopVersion Configured_Total_Data_Nodes Configured_Total_RM_Nodes Configured_Total_Yarn_Nodes Configured_data_nodes_list Configured_resource_manager_list Configured_yarn_nodes_list cluster_size cluster_used_size cluster_available_Size cluster_use_Percentage| rename cluster_size as cluster_size(TB) cluster_used_size as cluster_used_size(TB) cluster_available_Size as cluster_available_Size(TB) |sort - _time | head 1</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>  
+  <row>
+    <panel>
+      <title>Dynamic</title>
+      <table>
+        <search>
+          <query>sourcetype=server_stats plugin=hadoop_dynamic_data job_id=$JobTagID$ |table application_id application_name application_applicationType application_state application_progress application_startedTime application_finishedTime application_elapsedTime job_mapsTotal job_reducesTotal job_mapsCompleted job_mapsPending job_mapsRunning job_mapProgress job_reducesCompleted job_reducesPending job_reducesRunning job_reduceProgress | sort - _time | Head 1</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+   <row>
+    <panel>
+      <title>Maps Stats</title>
+      <chart>
+        <search>
+          <query>sourcetype=server_stats plugin=hadoop_dynamic_data  job_id=$JobTagID$ | timechart values(job_mapsCompleted) values(job_mapsRunning) values(job_mapsPending)</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+  </row>
+   <row>
+    <panel>
+      <title>Reduces Stats</title>
+      <chart>
+        <search>
+          <query>sourcetype=server_stats plugin=hadoop_dynamic_data  job_id=$JobTagID$ | timechart values(job_reducesCompleted) values(job_reducesRunning) values(job_reducesPending)</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>

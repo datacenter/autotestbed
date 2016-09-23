@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>MapleLabs System Analytics s</title>
+    <link rel="shortcut icon" href="{{SPLUNKWEB_URL_PREFIX}}/static/appLogo.png" />
+        <link rel="stylesheet" type="text/css" href="/en-US/static/@f44afce176d0/css/build/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="/en-US/static/@f44afce176d0/css/build/pages/dashboard-simple-bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/en-US/static/@f44afce176d0/css/build/pages/custom.css" />
+  <style>
+ .app-link .app-logo{
+    float:right !important;
+    padding-left:10px;
+    }
+    .app-link .app-name{
+        display:block !important;
+    }
+#formCustomerInfo .input-text,.form-submit{
+clear:both;
+display:block !important;
+}
+#formCustomerInfo .fieldset .input{
+display:block !important;
+width:auto !important;
+}
+#formCustomerInfo .splunk-view label:first-child{
+   float: left;
+width: 150px;
+}
+#formCustomerInfo .splunk-view .splunk-textinput{
+float:left;
+}
+    
+#row1 .splunk-view .splunk-table th:nth-of-type(2) {
+    display:none
+}
+    
+#row1 .splunk-view .splunk-table td:nth-of-type(2) {
+    display:none
+}
+    
+
+</style>
+</head>
+<body class="simplexml preload locale-en">
+<!-- 
+BEGIN LAYOUT
+This section contains the layout for the dashboard. Splunk uses proprietary
+styles in <div> tags, similar to Bootstrap's grid system. 
+-->
+<a class="navSkip" href="#navSkip" tabindex="1">Screen reader users, click here to skip the navigation bar</a>
+<div class="header splunk-header">
+        <div id="placeholder-splunk-bar">
+            <a href="{{SPLUNKWEB_URL_PREFIX}}/app/launcher/home" class="brand" title="splunk &gt; listen to your data">splunk<strong>&gt;</strong></a>
+        </div>
+            <div id="placeholder-app-bar"></div>
+</div>
+<a id="navSkip"></a>
+<div class="dashboard-body container-fluid main-section-body" data-role="main">
+    <div class="dashboard-header clearfix">
+        <h2>Monitoring Jobs</h2>
+    </div>
+  <div class="col-lg-12">
+       <div class="wid30 bgWhite pull-left brd">
+        <div class="headerBar">Add New Job</div>   
+         <form id="formCustomerInfo">
+          <div class="innerBox">
+            <div class="fieldset">
+            <div class="input input-dropdown" id="input1">
+                <label>Job</label>
+            </div>
+            <div class="input input-text" id="input2">
+                <label id="label1">field1</label>
+            </div>
+            <div class="input input-text" id="input3">
+                <label id="label2">field2</label>
+            </div>
+            <div class="input input-text" id="input4">
+                <label id="label3">field3</label>
+            </div>
+            <div class="input input-text" id="input5">
+                <label id="label4">field4</label>
+            </div>
+            <div class="input input-text" id="input6">
+                <label id="label5">field5</label>
+            </div>
+           </div>
+        </div> 
+            <div class="form-submit submit_Container"  id="search_btn">
+                <button class="btn btn-primary submit pull-right">Submit</button>
+            </div>
+           
+          </form> 
+        </div>
+        
+        <div class="pull-left wid68 rightContainer">
+          <h2>Cluster</h2>
+            <div class="wid31 pull-left pad brd">
+            <div class="headerBar">Cluster Summary</div>
+            <div class="bgWhite innerBox height193">
+                <dl class="clusterSummary brd_bottom">
+                    <dd class="greenTxt brd_right">
+                        <h3 id="numOfNodes">0</h3>
+                        <div># Nodes</div>
+                    </dd>
+                    <dd class="lightblueTxt">
+                        <h3 id="numOfYarnNodes">0</h3>
+                        <div># Yarn Nodes</div>
+                    </dd>
+                </dl>
+                <dl class="clusterSummary">
+                    <dd class="redTxt brd_right">
+                        <h3 id="numOfErrorNodes">0</h3>
+                        <div># Error Nodes</div>
+                    </dd>
+                    <dd class="blueTxt">
+                     <h3><img src="/en-US/splunkd/__raw/servicesNS/admin/MonitoringSolutions/static/circle.jpg"/></h3>
+                        <div>CLDB/Zookeeper health</div>
+                    </dd>
+                </dl>
+            </div>
+            <div class="submit_Container"><a href="javascript:void(0)" class="blueTxt pull-right font13">View Hadoop Status >></a></div>
+        </div>
+        <div class="wid31 pull-left pad brd">
+            <div class="headerBar">Cluster Status</div>
+            <div class="bgWhite innerBox height193">
+                 <dl class="clusterSummary brd_bottom" style="margin-bottom:25px;">
+                    <dd class="greenTxt brd_right">
+                        <h3 class="thikGrayTxt" id="cpuUtil">0<span class="font12 lightGrayTxt">%</span></h3>
+                        <div class="lightGrayTxt">AVG CPU Util</div>
+                    </dd>
+                    <dd class="lightblueTxt">
+                        <h3 class="thikGrayTxt" id="ramUtil">0<span class="font12 lightGrayTxt">%</span></h3>
+                        <div class="lightGrayTxt">AVG RAM Util</div>
+                    </dd>
+                </dl>
+                <dl class="clusterSummary">
+                    <dd class="redTxt brd_right">
+                        <h3 class="thikGrayTxt" id="avgNic">0<span class="font12 lightGrayTxt">Mbps</span></h3>
+                        <div class="lightGrayTxt">AVG Nic</div>
+                    </dd>
+                    <dd class="blueTxt">
+                        <h3 class="thikGrayTxt" id= "diskRate">0<span class="font12 lightGrayTxt">MBps</span></h3>
+                        <div class="lightGrayTxt">Disk Rate</div>
+                    </dd>
+                </dl> 
+            <div class="noValue" style="display:none">Currently NO Status Running</div>
+            </div>
+            <div class="submit_Container">&nbsp;</div>
+        </div>
+    
+        <div class="wid31 pull-left pad brd">
+            <div class="headerBar">Cluster Job</div>
+            <div class="bgWhite innerBox height193" id="showRunningJobStats">
+                <dl class="clusterSummary brd_bottom" style="margin-bottom:15px;">
+                    <dd class="greenTxt brd_right">
+                        <h4 class="thikGrayTxt" id="jobNameTag"></h4>
+                        <div class="lightGrayTxt" style="margin-left: -12px;">Job name</div>
+                    </dd>
+                    <dd class="lightblueTxt">
+                        <h4 class="thikGrayTxt" id="elapsedTime">00:00:00</h4>
+                        <div class="lightGrayTxt">Elapsed time</div>
+                    </dd>
+                </dl>
+                <div>
+                    <table cellpadding="4" cellspacing="2" width="100%" class="lightGrayTxt tableView">
+                        <thead> 
+                        <tr>
+                            <th></th><th>Total</th><th>Completed</th><th>Running</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td># of Maps</td><td id="mapsTotal">0</td><td id="mapsComplete">0</td><td id="mapsRunning">0</td>
+                        </tr>
+                        <tr>
+                            <td># of Reduces</td><td id="reducesTotal">0</td><td id="reducesComplete">0</td><td id="reducesRunning">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>          
+            </div> 
+          <div class="noValue" id="hideRunningJobStats" style="display:none; height: 193px; padding: 10px">Currently NO Jobs Running</div>
+            <div class="submit_Container">&nbsp; </div>
+        </div>
+        </div>
+
+
+     </div>  
+
+
+    <div class="input input-timerangepicker" id="input8" style="width:20%">
+        <label id="label7">&nbsp;</label>
+    </div>
+    <br/>
+    <div id="row1" class="dashboard-row dashboard-row1">
+        <div id="panel1" class="dashboard-cell" style="width: 100%;">
+            <div class="dashboard-panel clearfix">
+                
+                <div class="panel-element-row">
+                    <div id="element1" class="dashboard-element table" style="width: 100%">
+                       <div class="panel-head">
+                            <h3>Job Details</h3>
+                        </div>
+                        <div class="panel-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<div class="footer"></div>
+
+  
+ <!--<div style="border:1px solid black; height:50px; width:50px">{{SPLUNKWEB_URL_PREFIX}}</div>-->
+<!-- 
+END LAYOUT
+-->
+
+<script src="{{SPLUNKWEB_URL_PREFIX}}/config?autoload=1"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/static/js/i18n.js"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/i18ncatalog?autoload=1"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/static/js/build/simplexml.min/config.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+require.config({
+    baseUrl: "{{SPLUNKWEB_URL_PREFIX}}/static/js",
+    waitSeconds: 0 // Disable require.js load timeout
+});
+
+//
+// LIBRARY REQUIREMENTS
+//
+// In the require function, we include the necessary libraries and modules for
+// the HTML dashboard. Then, we pass variable names for these libraries and
+// modules as function parameters, in order.
+// 
+// When you add libraries or modules, remember to retain this mapping order
+// between the library or module and its function parameter. You can do this by
+// adding to the end of these lists, as shown in the commented examples below.
+
+require([
+    "splunkjs/mvc",
+    "splunkjs/mvc/utils",
+    "splunkjs/mvc/tokenutils",
+    "underscore",
+    "jquery",
+    "splunkjs/mvc/simplexml",
+    "splunkjs/mvc/headerview",
+    "splunkjs/mvc/footerview",
+    "splunkjs/mvc/simplexml/dashboardview",
+    "splunkjs/mvc/simplexml/dashboard/panelref",
+    "splunkjs/mvc/simplexml/element/chart",
+    "splunkjs/mvc/simplexml/element/event",
+    "splunkjs/mvc/simplexml/element/html",
+    "splunkjs/mvc/simplexml/element/list",
+    "splunkjs/mvc/simplexml/element/map",
+    "splunkjs/mvc/simplexml/element/single",
+    "splunkjs/mvc/simplexml/element/table",
+    "splunkjs/mvc/simpleform/formutils",
+    "splunkjs/mvc/simplexml/eventhandler",
+    "splunkjs/mvc/simplexml/searcheventhandler",
+    "splunkjs/mvc/simpleform/input/dropdown",
+    "splunkjs/mvc/simpleform/input/radiogroup",
+    "splunkjs/mvc/simpleform/input/linklist",
+    "splunkjs/mvc/simpleform/input/multiselect",
+    "splunkjs/mvc/simpleform/input/checkboxgroup",
+    "splunkjs/mvc/simpleform/input/text",
+    "splunkjs/mvc/simpleform/input/timerange",
+    "splunkjs/mvc/simpleform/input/submit",
+    "splunkjs/mvc/searchmanager",
+    "splunkjs/mvc/savedsearchmanager",
+    "splunkjs/mvc/postprocessmanager",
+    "splunkjs/mvc/simplexml/urltokenmodel"
+    // Add comma-separated libraries and modules manually here, for example:
+    // ..."splunkjs/mvc/simplexml/urltokenmodel",
+    // "splunkjs/mvc/checkboxview"
+    ],
+    function(
+        mvc,
+        utils,
+        TokenUtils,
+        _,
+        $,
+        DashboardController,
+        HeaderView,
+        FooterView,
+        Dashboard,
+        PanelRef,
+        ChartElement,
+        EventElement,
+        HtmlElement,
+        ListElement,
+        MapElement,
+        SingleElement,
+        TableElement,
+        FormUtils,
+        EventHandler,
+        SearchEventHandler,
+        DropdownInput,
+        RadioGroupInput,
+        LinkListInput,
+        MultiSelectInput,
+        CheckboxGroupInput,
+        TextInput,
+        TimeRangeInput,
+        SubmitButton,
+        SearchManager,
+        SavedSearchManager,
+        PostProcessManager,
+        UrlTokenModel
+
+        // Add comma-separated parameter names here, for example: 
+        // ...UrlTokenModel, 
+        // CheckboxView
+        ) {
+
+        var pageLoading = true;
+
+
+        // 
+        // TOKENS
+        //
+        
+        // Create token namespaces
+        var urlTokenModel = new UrlTokenModel();
+        mvc.Components.registerInstance('url', urlTokenModel);
+        var defaultTokenModel = mvc.Components.getInstance('default', {create: true});
+        var submittedTokenModel = mvc.Components.getInstance('submitted', {create: true});
+
+        urlTokenModel.on('url:navigate', function() {
+            defaultTokenModel.set(urlTokenModel.toJSON());
+            if (!_.isEmpty(urlTokenModel.toJSON()) && !_.all(urlTokenModel.toJSON(), _.isUndefined)) {
+                submitTokens();
+            } else {
+                submittedTokenModel.clear();
+            }
+        });
+
+        // Initialize tokens
+        defaultTokenModel.set(urlTokenModel.toJSON());
+
+        function submitTokens() {
+            // Copy the contents of the defaultTokenModel to the submittedTokenModel and urlTokenModel
+            FormUtils.submitForm({ replaceState: pageLoading });
+        }
+
+        function setToken(name, value) {
+            defaultTokenModel.set(name, value);
+            submittedTokenModel.set(name, value);
+        }
+
+        function unsetToken(name) {
+            defaultTokenModel.unset(name);
+            submittedTokenModel.unset(name);
+        }        
+    
+        //
+        // SEARCH MANAGERS
+        //
+        var search1 = new SearchManager({
+            "id": "search1",
+            "status_buckets": 0,
+            "latest_time": "$form.&nbsp.latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "$form.&nbsp.earliest$",
+            "search":"source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx Server_Stats Switch_Stats | dedup JobTagID | rename Job as \"Job Type\" JobTagName as \"Job Name\" Job_Status as \"Job Status\" Time_Seconds as \"Completion Time (s)\" Server_Stats as \"Server Stats\" Switch_Stats as \"Switch Stats\" job_mapsTotal as \"Total Maps\"  job_reducesTotal as \"Total Reduces\" avg_cpu as \" Avg CPU Util\" avg_ram as \"Avg RAM Util\" avg_disk as \"Avg Disk Util\" avg_inf_rx as \"Avg NIC Rx\" avg_inf_tx as \"Avg NIC Tx\"",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+        var search2 = new SearchManager({
+            "id": "search2",
+            "status_buckets": 0,
+            "latest_time": "$latest$",
+            "cancelOnUnload": false,
+            "earliest_time": "0",
+            "search": "| script python start_monitoring $Job$ $field1$ $field2$ $field3$ $field4$ $field5$",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+        
+        var search3 = new SearchManager({
+            "id": "search3",
+            "status_buckets": 0,
+            "latest_time": "$form.&nbsp.latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "$form.&nbsp.earliest$",
+            "search":"|set intersect [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx | dedup JobTagID| fields JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ] [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx |dedup JobTagID |eval JobTagID =  if(Job_Status == \"Running\", JobTagID,none) | table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx  | fields JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ] | table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+        var search4 = new SearchManager({
+            "id": "search4",
+            "status_buckets": 0,
+            "latest_time": "$form.&nbsp.latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "$form.&nbsp.earliest$",
+            "search":"sourcetype=server_stats plugin=hadoop_static_data [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] | table JobTagName total_cluster_nodes error_nodes Configured_Total_Data_Nodes Configured_Total_RM_Nodes Configured_Total_Yarn_Nodes zoo_keeper_status  | rename total_cluster_nodes as \"Total Nodes\" error_nodes as \"Total Error Nodes\" Configured_Total_Data_Nodes as \"Total Data Nodes\" Configured_Total_RM_Nodes as \"Total RM Nodes\" Configured_Total_Yarn_Nodes as \"Total Yarn Nodes\" zoo_keeper_status as \"Zookeeper Status\" |  sort - _time | head 1 ",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+        
+
+        // Function for appending 0 to single digit results
+
+        function appendZero(num){
+            return(num < 10 ? '0' : '') + num;
+        }
+
+        //Function to convert time in seconds to HH:MM:SS format
+        function toHHMMSS(sec){
+        var date = new Date(sec * 1000);
+        var HH = date.getUTCHours();
+        var MM = date.getUTCMinutes();
+        var SS = date.getSeconds();
+        
+        appendZero(HH);
+        appendZero(MM);
+        appendZero(SS);
+
+        return (HH + ":" + MM + ":" + SS);
+        
+        }
+
+        var clusterSearch = splunkjs.mvc.Components.get("search4");
+        var clusterResults = clusterSearch.data("results");
+       
+        clusterResults.on("data", function() {    
+            //console.log(clusterResults.data());          
+            document.getElementById("numOfNodes").innerHTML = appendZero(clusterResults.data().rows[0][1]);
+            document.getElementById("numOfYarnNodes").innerHTML = appendZero(clusterResults.data().rows[0][5]);
+            document.getElementById("numOfErrorNodes").innerHTML = appendZero(clusterResults.data().rows[0][2]);
+        }); 
+
+        var search5 = new SearchManager({
+            "id": "search5",
+            "status_buckets": 0,
+            "latest_time": "$form.&nbsp.latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "$form.&nbsp.earliest$",
+            "search":"sourcetype=server_stats plugin=hadoop_dynamic_data [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none)| eval JobTagID =  if(Job_Status ==\"Running\", JobTagID,none) | table JobTagName JobTagID] | table JobTagName JobTagID job_mapsTotal job_reducesTotal job_mapsCompleted job_mapsRunning job_reducesCompleted job_reducesRunning application_elapsedTime | rename job_mapsTotal as \"Total Maps\" job_reducesTotal as \"Total Reduces\" job_mapsCompleted as \"Maps Completed\" job_mapsRunning as \"Maps Running\"  job_reducesCompleted as \"Reduces Completed\" job_reducesRunning as \"Reduces Running\" application_elapsedTime as \"Elapsed Time\"|  sort - _time |head 1",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+        var runningJobs = splunkjs.mvc.Components.get("search5");
+        var latestRunningJob = runningJobs.data("results");
+        var latestJobDetails;
+        latestRunningJob.on("data", function() {  
+        //console.log(latestRunningJob.data()); 
+            latestJobDetails = latestRunningJob.data().rows;  
+         
+                //console.log(latestRunningJob.data());
+                document.getElementById("showRunningJobStats").style.display = 'block';
+                document.getElementById("hideRunningJobStats").style.display = 'none';
+
+                document.getElementById("jobNameTag").innerHTML = latestJobDetails[0][0];
+            
+                document.getElementById("mapsTotal").innerHTML = latestJobDetails[0][2];
+                document.getElementById("mapsComplete").innerHTML = latestJobDetails[0][4];
+                document.getElementById("mapsRunning").innerHTML = latestJobDetails[0][5];
+
+                document.getElementById("reducesTotal").innerHTML = latestJobDetails[0][3];
+                document.getElementById("reducesComplete").innerHTML = latestJobDetails[0][6];
+                document.getElementById("reducesRunning").innerHTML = latestJobDetails[0][7];
+                
+                document.getElementById("elapsedTime").innerHTML = toHHMMSS(latestJobDetails[0][8]);
+            
+        });
+    
+//To Check if search5 is complete and the result is null or not - To display "No Jobs running message"
+     search5.on('search:done', function(properties) {       
+            if (properties.content.resultCount === 0) {
+                console.log("no results");
+                document.getElementById("showRunningJobStats").style.display = 'none';
+                document.getElementById("hideRunningJobStats").style.display = 'block';
+            }
+            else{
+                setTimeout(function () { 
+                location.reload();
+                }, 30 * 1000);              
+            }
+    });
+
+         var search6 = new SearchManager({
+            "id": "search6",
+            "status_buckets": 0,
+            "latest_time": "$form.&nbsp.latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "$form.&nbsp.earliest$",
+            "search":"sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName  | sort - _time | head 1 ] type = collectd plugin=cpu | stats latest(cpu_util) as avg_cpu_util by Hostname | stats avg(avg_cpu_util) as avg_cpu_util | eval \"Avg CPU Util (%)\" = round(avg_cpu_util,2)|table \"Avg CPU Util (%)\" | appendcols [ search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin=memory | stats latest(mem_util) as util latest(mem_buffered) as buff latest(mem_cached) as cache latest(mem_free) as free latest(mem_slab_recl) as slab latest(mem_slab_unrecl) as unslab  by Hostname | eval mem_util=(util*100)/(buff+cache+free+slab+unslab+util) | stats avg(mem_util) as mem_util | eval \"Avg RAM Util (%)\" = round(mem_util,2)|table \"Avg RAM Util (%)\"  ] | appendcols [search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin= interface plugin_instance=all-interfaces collectd_type=if_octets | stats values(Rx) as valueRx by Hostname, _time | stats earliest(_time) AS Earliest, earliest(valueRx) as start_Rx , latest(_time) AS Latest, latest(valueRx) as end_Rx by Hostname | eval total = (end_Rx-start_Rx)/(Latest-Earliest) | eval Rx_Rate= (total*8)/1000000 |  stats avg(Rx_Rate) as Rx_Rate by Hostname | eval Rx_Rate = round(Rx_Rate,2)| stats sum(Rx_Rate) as \"Avg NIC Rx (Mbps)\" ] | appendcols [ search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin= interface plugin_instance=all-interfaces collectd_type=if_octets | stats values(Tx) as valueTx by Hostname, _time,JobTagName | stats earliest(_time) AS Earliest, earliest(valueTx) as start_Tx , latest(_time) AS Latest, latest(valueTx) as end_Tx by Hostname,JobTagName  | eval total = (end_Tx-start_Tx)/(Latest-Earliest) | eval Tx_Rate= (total*8)/1000000 |  stats avg(Tx_Rate) as Tx_Rate by Hostname,JobTagName| eval Tx_Rate = round(Tx_Rate,2)| stats sum(Tx_Rate) as \"Avg NIC Tx (Mbps)\" by JobTagName] | appendcols[ search sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1] type=collectd  plugin=readdisk collectd_type=disk_octets | stats values(read) as valueRead by Hostname, _time,JobTagName | stats earliest(_time) AS Earliest, earliest(valueRead) as start_read , latest(_time) AS Latest, latest(valueRead) as end_read by Hostname | eval total = (end_read-start_read)/(Latest-Earliest) | eval disk_read = (total/1000000) | stats avg(disk_read) as disk_read | eval disk_read = round(disk_read,2)| chart values(disk_read)  as \"Avg Disk Read (MBps)\"] | appendcols [  search sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type=collectd  plugin=readdisk collectd_type=disk_octets | stats values(write) as valueWrite by Hostname, _time | stats earliest(_time) AS Earliest, earliest(valueWrite) as start_write , latest(_time) AS Latest, latest(valueWrite) as end_write by Hostname | eval total = (end_write-start_write)/(Latest-Earliest) | eval disk_write = (total/1000000) | stats avg(disk_write) as disk_write | eval disk_write = round(disk_write,2)| chart values(disk_write)  as \"Avg Disk Write (MBps)\"] | table \"Avg CPU Util (%)\",\"Avg RAM Util (%)\",\"Avg NIC Rx (Mbps)\",\"Avg NIC Tx (Mbps)\" ,\"Avg Disk Read (MBps)\",\"Avg Disk Write (MBps)\"",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+        
+        var clusterStatusSearch = splunkjs.mvc.Components.get("search6");
+        var clusterStatusResults = clusterStatusSearch.data("results");
+       
+        clusterStatusResults.on("data", function() {  
+            //console.log("Search 6 Data - Cluster Status- *********************************************************");            
+            //console.log(clusterStatusResults.data());         
+            document.getElementById("cpuUtil").childNodes[0].nodeValue= Math.ceil(clusterStatusResults.data().rows[0][0]);
+            document.getElementById("ramUtil").childNodes[0].nodeValue = Math.ceil(clusterStatusResults.data().rows[0][1]);         
+            document.getElementById("avgNic").childNodes[0].nodeValue = Math.ceil(Number(clusterStatusResults.data().rows[0][2]) + 
+                                                                    Number(clusterStatusResults.data().rows[0][3]));
+            document.getElementById("diskRate").childNodes[0].nodeValue = Math.ceil(Number(clusterStatusResults.data().rows[0][4]) + 
+                                                                    Number(clusterStatusResults.data().rows[0][5]));
+        }); 
+
+        //
+        // SPLUNK HEADER AND FOOTER
+        //
+
+        new HeaderView({
+            id: 'header',
+            section: 'dashboards',
+            el: $('.header'),
+            acceleratedAppNav: true,
+            useSessionStorageCache: true,
+            splunkbar: true,
+            appbar: true,
+            litebar: false,
+        }, {tokens: true}).render();
+
+        new FooterView({
+            id: 'footer',
+            el: $('.footer')
+        }, {tokens: true}).render();
+
+
+        //
+        // DASHBOARD EDITOR
+        //
+
+        new Dashboard({
+            id: 'dashboard',
+            el: $('.dashboard-body'),
+            showTitle: true,
+            editable: true
+        }, {tokens: true}).render();
+
+
+        //
+        // VIEWS: VISUALIZATION ELEMENTS
+        //
+
+        var element1 = new TableElement({
+            "id": "element1",
+            "drilldown": "row",
+            "rowNumbers": "undefined",
+            "wrap": "undefined",
+            "managerid": "search1",
+            "el": $('#element1')
+        }, {tokens: true, tokenNamespace: "submitted"}).render();
+
+        element1.on("click", function(e) {
+            if (e.field == "Server Stats") {
+                e.preventDefault();
+                var url = TokenUtils.replaceTokenNames("{{SPLUNKWEB_URL_PREFIX}}/app/MonitoringSolutions/server_view?JobTagName=$row.Job\ Name$&earliest=0&latest=", _.extend(submittedTokenModel.toJSON(), e.data), TokenUtils.getEscaper('url'));
+                localStorage.setItem('jobTagName',e.data['row.Job Name']);
+                utils.redirect(url, false, "_self");
+            }
+       
+        if (e.field == "Switch Stats") {
+                e.preventDefault();
+                var url = TokenUtils.replaceTokenNames("{{SPLUNKWEB_URL_PREFIX}}/app/MonitoringSolutions/switch_view_html?JobTagName=$row.Job\ Name$&earliest=0&latest=", _.extend(submittedTokenModel.toJSON(), e.data), TokenUtils.getEscaper('url'));
+                localStorage.setItem('jobTagName',e.data['row.Job Name']);
+                utils.redirect(url, false, "_self");
+            }
+        if (e.field == "Hadoop Stats") {
+                e.preventDefault();
+                var url = TokenUtils.replaceTokenNames("{{SPLUNKWEB_URL_PREFIX}}/app/MonitoringSolutions/hadoop_stats_html?JobTagID=$row.JobTagID$&JobTagName=$row.Job\ Name$&earliest=0&latest=", _.extend(submittedTokenModel.toJSON(), e.data), TokenUtils.getEscaper('url'));
+                localStorage.setItem('jobTagName',e.data['row.Job Name']);
+                utils.redirect(url, false, "_self");
+            }
+ });
+        
+        var element2 = new TableElement({
+            "id": "element2",
+            "drilldown": "row",
+            "rowNumbers": "undefined",
+            "wrap": "undefined",
+            "managerid": "search2",
+            "el": $('#element2')
+        }, {tokens: true}).render();
+ 
+
+        //
+        // VIEWS: FORM INPUTS
+        //
+
+        var input1 = new DropdownInput({
+            "id": "input1",
+            "choices": [
+                {"value": "Teragen", "label": "Teragen"},
+                {"value": "Terasort", "label": "Terasort"},
+                {"value": "DFSIO_WRITE", "label": "DFSIO_WRITE"},
+                {"value": "DFSIO_READ", "label": "DFSIO_READ"},
+            ],
+            "selectFirstChoice": false,
+            "searchWhenChanged": false,
+            "default": "DFSIO_READ",
+            "showClearButton": true,
+            "value": "$form.Job$",
+            "el": $('#input1')
+        }, {tokens: true}).render();
+
+        input1.on("change", function(newValue) {
+            document.getElementById('label1').innerHTML = 'Job Name';
+            document.getElementById('label2').innerHTML = 'Number of Trials';
+
+            $("#input2").find('input[type="text"]').val("Default"); 
+            $("#input3").find('input[type="text"]').val("1");   
+
+            if (newValue == "Teragen"){
+                document.getElementById('input4').style.visibility = 'visible';
+                document.getElementById('input5').style.visibility = 'visible';
+                document.getElementById('input6').style.visibility = 'visible';
+
+                document.getElementById('label3').innerHTML = 'Size of Data (GB)';
+                document.getElementById('label4').innerHTML = 'Block Size (MB)';
+                document.getElementById('label5').innerHTML = 'Total Number of Mappers';
+
+                $("#input4").find('input[type="text"]').val("128"); 
+                $("#input5").find('input[type="text"]').val("512"); 
+                $("#input6").find('input[type="text"]').val("256"); 
+            }
+            if (newValue == "Terasort"){
+                document.getElementById('input5').style.visibility = 'hidden';
+                document.getElementById('input6').style.visibility = 'hidden';
+
+                document.getElementById('label3').innerHTML = 'Number of Reducers';
+
+                $("#input4").find('input[type="text"]').val("60"); 
+            }
+            if ((newValue == "DFSIO_WRITE") || (newValue == "DFSIO_READ")){
+                document.getElementById('input4').style.visibility = 'visible';
+                document.getElementById('input5').style.visibility = 'visible';
+                document.getElementById('input6').style.visibility = 'hidden';
+
+                document.getElementById('label3').innerHTML = 'Number of Files';
+                document.getElementById('label4').innerHTML = 'Size per File (GB)';
+
+                $("#input4").find('input[type="text"]').val("1000"); 
+                $("#input5").find('input[type="text"]').val("128"); 
+            }
+            FormUtils.handleValueChange(input1);
+        });
+        
+        var input2 = new TextInput({
+            "id": "input2",
+            "data-ms-point":"f1",
+            "value": "$form.field1$",
+            "el": $('#input2')
+        }, {tokens: true}).render();
+
+        input2.on("change", function(newValue) {
+            FormUtils.handleValueChange(input2);
+        });
+        
+        var input3 = new TextInput({
+            "id": "input3",
+            "value": "$form.field2$",
+            "el": $('#input3'),
+            "data-ms-point":"f2",
+        }, {tokens: true}).render();
+
+        input3.on("change", function(newValue) {
+            FormUtils.handleValueChange(input3);
+        });
+        
+        var input4 = new TextInput({
+            "id": "input4",
+            "value": "$form.field3$",
+            "el": $('#input4')
+        }, {tokens: true}).render();
+
+        input4.on("change", function(newValue) {
+            FormUtils.handleValueChange(input4);
+        });
+        
+        var input5 = new TextInput({
+            "id": "input5",
+            "value": "$form.field4$",
+            "el": $('#input5')
+        }, {tokens: true}).render();
+
+        input5.on("change", function(newValue) {
+            FormUtils.handleValueChange(input5);
+        });
+        
+        var input6 = new TextInput({
+            "id": "input6",
+            "value": "$form.field5$",
+            "el": $('#input6')
+        }, {tokens: true}).render();
+
+        input6.on("change", function(newValue) {
+            FormUtils.handleValueChange(input6);
+        });
+        
+        var input8 = new TimeRangeInput({
+            "id": "input8",
+            "default": {"latest_time": null, "earliest_time": "0"},
+            "earliest_time": "$form.&nbsp.earliest$",
+            "latest_time": "$form.&nbsp.latest$",
+            "searchWhenChanged": true,
+            "el": $('#input8')
+        }, {tokens: true}).render();
+
+        input8.on("change", function(newValue) {
+            FormUtils.handleValueChange(input8);
+        });
+                
+
+        // 
+        // SERVICE OBJECT
+        //
+
+        // Create a service object using the Splunk SDK for JavaScript
+        // to send REST requests
+        var service = mvc.createService({ owner: "nobody" });
+        
+        // 
+        // SUBMIT FORM DATA
+        //
+        search1.startSearch();  
+        var submit = new SubmitButton({
+            id: 'submit',
+            el: $('#search_btn')
+        }, {tokens: true}).render();
+
+        submit.on("submit", function() {
+            defaultTokenModel.set("field1", $("#input2").find('input[type="text"]').val());
+            defaultTokenModel.set("field2", $("#input3").find('input[type="text"]').val());
+            defaultTokenModel.set("field3", $("#input4").find('input[type="text"]').val());
+            defaultTokenModel.set("field4", $("#input5").find('input[type="text"]').val());
+            defaultTokenModel.set("field5", $("#input6").find('input[type="text"]').val());
+            submitTokens();
+            search2.startSearch();
+            search1.startSearch();
+        });
+
+        // Initialize time tokens to default
+        if (!defaultTokenModel.has('earliest') && !defaultTokenModel.has('latest')) {
+            defaultTokenModel.set({ earliest: '0', latest: '' });
+        }
+
+        if (!_.isEmpty(urlTokenModel.toJSON())){
+            submitTokens();
+        }
+
+        //
+        // DASHBOARD READY
+        //
+         
+
+
+        DashboardController.ready();
+        pageLoading = false;
+
+}
+);
+
+
+
+// ]]>
+</script>
+</body>
+</html>

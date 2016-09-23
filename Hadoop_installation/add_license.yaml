@@ -1,0 +1,10 @@
+- hosts: ansible-node
+  gather_facts: true
+  sudo: true
+  vars:
+    path1: "{{lookup('pipe', 'pwd')}}"
+  tasks:
+    - name: Script to create configure.sh
+      sudo: true
+      command: python {{ path1 }}/files/license.py {{ path }} {{ cluster_name }}
+

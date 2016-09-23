@@ -1,0 +1,41 @@
+[server]
+ ip = 172.31.219.94
+ user_name = cobbler
+ password = cisco123
+
+[files]
+ sshkey_path = /root/.ssh/id_rsa.pub
+ seedfile_path = /var/lib/cobbler/kickstarts/pukhrajtest.seed
+
+
+[system]
+  [[create_system]]
+
+     [[[node1]]]
+       name = test3
+       hostname = compute001
+       macaddress = bc:16:65:b4:92:13
+       kvm_ip = 192.168.0.72
+       kvm_subnet = 255.255.0.0
+       kvm_gateway = 192.168.0.1
+       profile = ubuntu-server-x86_64
+       CIMC_ip = 172.31.219.140
+       CIMC_user = admin
+       CIMC_password = cisco123
+
+
+  [[modify_system]]
+     [[[node1]]]
+       name = test3
+       hostname = host2
+       macaddress = bc:16:65:b4:92:12
+       kvm_ip = 192.168.0.60
+       kvm_subnet = 255.255.0.0
+       kvm_gateway = 192.168.0.1
+       profile = ubuntu-server-x86_64
+       CIMC_ip = 172.31.219.140
+       CIMC_user = admin
+       CIMC_password = cisco123
+
+
+

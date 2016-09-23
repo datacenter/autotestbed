@@ -1,0 +1,137 @@
+.headerBar{
+	padding:10px 15px; 
+	background:#f5f5f5; 
+	border-bottom:1px solid #ccc;
+	font-size:14px;
+	letter-spacing:0.4px;
+	color:#787878;
+	font-weight:bold;
+}
+.wid31{
+	width:31%;
+}
+.wid68{
+	width:68%;
+}
+.bgWhite{
+	background:#fff;
+}
+.innerBox{
+	padding:10px 15px 10px 15px;
+}
+.submit_Container{
+	background:#fcfcfc; 
+	border-top:1px solid #ccc;
+	padding:10px 15px; 
+	overflow:hidden;
+}
+.brd_right{
+	border-right:1px solid #ccc;
+}	
+.brd_bottom{
+	border-bottom:1px solid #ccc;
+}
+.brd{
+	border:1px solid #cfcfcf;
+}
+.pad{
+	margin:0px 0px 10px 18px;
+}
+.splunk-choice-input{
+    padding-bottom: 5px !important;
+} 
+.wid30 #formCustomerInfo{
+	margin-bottom:0px;
+}
+.greenTxt{
+	color:#66a638;
+	letter-spacing: 0.4px;
+}
+.lightblueTxt{
+	color:#00aaae;
+	letter-spacing: 0.4px;
+}
+.redTxt{
+	color:#ff0000;
+	letter-spacing: 0.4px;
+}
+.blueTxt{
+	color:#0f13e3;
+	letter-spacing: 0.4px;
+}
+.clusterSummary {
+	text-align:center;
+	overflow:hidden;
+}
+.clusterSummary h3{
+	font-size:28px;
+	padding: 0px;
+   	margin: 0px;
+	font-weight:bold;
+}
+.clusterSummary h4{
+	font-size:18px;
+	color:#4b4b4b;
+}
+.thikGrayTxt{
+	color:#4b4b4b;
+	letter-spacing: 0.4px;
+}
+.noValue{
+	    color: #a5a5a5;
+	    font-size: 21px;
+	    font-weight: bold;
+	    text-align: center;
+	    line-height: 31px;
+	    position: relative;
+	    top: 30%;
+	    letter-spacing: 0.5px;
+}
+.font12{
+	font-size:12px;
+}
+.font13{
+	font-size:13px;
+}
+.lightGrayTxt{
+	color:#8c8a8a;
+	letter-spacing: 0.4px;
+	font-weight:normal;
+}
+.height193{
+	height:193px;
+}
+.clusterSummary dd{ 
+    width: 45%;
+    float: left;
+    overflow: hidden;
+    margin-bottom: 18px;
+    margin-top: 10px; 
+}
+ 
+.tableView thead tr th{
+	font-weight:bold;
+	text-align: right;
+	padding: 0px 5px 10px 0px;
+}
+.tableView thead{
+	border-bottom:1px solid #ccc;
+}
+.tableView tr{
+	border-bottom:1px solid #ccc;
+}
+.tableView tr:last-child{
+	border-bottom:0px;
+}
+.tableView tr td{
+ 	padding:10px 4px;
+	text-align: right;
+}
+.rightContainer h2{
+	color:#787878;
+	font-size:13px;
+	font-weight:bold;
+	 margin: 0px 0px 12px 17px;
+	 border-bottom: 1px solid #b6b6b6;
+	 line-height: 23px;
+}

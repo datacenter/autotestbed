@@ -1,0 +1,154 @@
+=head2 Tue Feb 16 11:38:08 2016: C<Module> L<Collectd|Collectd>
+
+=over 4
+
+=item *
+
+C<installed into: NONE/share/perl/5.18.2>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: >
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Feb 25 15:04:53 2016: C<Module> L<Collectd|Collectd>
+
+=over 4
+
+=item *
+
+C<installed into: NONE/share/perl/5.18.2>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: >
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Apr 21 15:05:29 2016: C<Module> L<Collectd|Collectd>
+
+=over 4
+
+=item *
+
+C<installed into: NONE/share/perl/5.18.2>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: >
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Apr 21 15:14:26 2016: C<Module> L<Collectd|Collectd>
+
+=over 4
+
+=item *
+
+C<installed into: NONE/share/perl/5.18.2>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: >
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Apr 21 15:49:05 2016: C<Module> L<Collectd|Collectd>
+
+=over 4
+
+=item *
+
+C<installed into: NONE/share/perl/5.18.2>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: >
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Apr 21 15:54:31 2016: C<Module> L<Collectd|Collectd>
+
+=over 4
+
+=item *
+
+C<installed into: NONE/share/perl/5.18.2>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: >
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Apr 21 16:00:01 2016: C<Module> L<Collectd|Collectd>
+
+=over 4
+
+=item *
+
+C<installed into: NONE/share/perl/5.18.2>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: >
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

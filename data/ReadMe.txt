@@ -1,0 +1,1 @@
+This directory contains sample data which can be loaded to Splunk

@@ -1,0 +1,14 @@
+{
+    "node1": {
+        "name": "test3", 
+        "hostname": "compute001", 
+        "macaddress": "bc:16:65:b4:92:13", 
+        "kvm_ip": "192.168.0.50", 
+        "kvm_subnet": "255.255.0.0", 
+        "kvm_gateway": "192.168.0.1", 
+        "profile": "ubuntu-server-x86_64", 
+        "CIMC_ip": "172.31.219.140", 
+        "CIMC_user": "admin", 
+        "CIMC_password": "cisco123"
+    }
+}

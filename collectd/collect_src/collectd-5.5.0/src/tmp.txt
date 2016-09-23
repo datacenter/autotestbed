@@ -1,0 +1,1279 @@
+aggregation.c:  vl.interval = 0;
+Binary file match_timediff.o matches
+Binary file email.o matches
+ceph.c:/** Timeout interval in seconds */
+ceph.c:#define CEPH_TIMEOUT_INTERVAL 1
+ceph.c:    end_tv.tv_sec += CEPH_TIMEOUT_INTERVAL;
+amqp.c:         * intervals. */
+amqp.c:    cdtime_t interval = plugin_get_interval ();
+amqp.c:            struct timespec ts_interval;
+amqp.c:                    CDTIME_T_TO_DOUBLE (interval));
+amqp.c:            CDTIME_T_TO_TIMESPEC (interval, &ts_interval);
+amqp.c:            nanosleep (&ts_interval, /* remaining = */ NULL);
+amqp.c:            struct timespec ts_interval;
+amqp.c:                    CDTIME_T_TO_DOUBLE (interval));
+amqp.c:            CDTIME_T_TO_TIMESPEC (interval, &ts_interval);
+amqp.c:            nanosleep (&ts_interval, /* remaining = */ NULL);
+powerdns.c:    cdt_timeout = plugin_get_interval () * 3 / 4;
+collectd-unixsock.pod:=item B<interval=>I<seconds>
+collectd-unixsock.pod:Gives the interval in which the data identified by I<Identifier> is being
+collectd-unixsock.pod:  -> | PUTVAL testhost/interface/if_octets-test0 interval=10 1179574444:123:456
+Binary file ted.o matches
+Binary file utils_vl_lookup.o matches
+Binary file fhcount.o matches
+turbostat.c:	/* check for TSC < 1 Mcycles over interval */
+turbostat.c:				"the entire interval. Fix this by running "
+turbostat.c:	double interval_float;
+turbostat.c:	interval_float = CDTIME_T_TO_DOUBLE(time_delta);
+turbostat.c:	turbostat_submit(name, "frequency", "average", 1.0 / 1000000 * t->aperf / interval_float);
+turbostat.c:		turbostat_submit(name, "frequency", "busy", 1.0 * t->tsc / 1000000 * t->aperf / t->mperf / interval_float);
+turbostat.c:	turbostat_submit(name, "gauge", "TSC", 1.0 * t->tsc / 1000000 / interval_float);
+turbostat.c:			turbostat_submit(name, "power", "pkg", p->energy_pkg * rapl_energy_units / interval_float);
+turbostat.c:			turbostat_submit(name, "power", "cores", p->energy_cores * rapl_energy_units / interval_float);
+turbostat.c:			turbostat_submit(name, "power", "GFX", p->energy_gfx * rapl_energy_units / interval_float);
+turbostat.c:			turbostat_submit(name, "power", "DRAM", p->energy_dram * rapl_energy_units / interval_float);
+varnish.c:			/* interval  = */ NULL,
+varnish.c:			/* interval  = */ NULL,
+Binary file battery.o matches
+collectd-threshold.pod:once each B<Interval> on the server.
+collectd-threshold.pod:missing value is generated once every B<Interval> seconds. If set to B<false>
+collectd-threshold.pod:dispatch any notification or, in other words, the number of B<Interval>s
+collectd-threshold.pod:internal cache. When this happens depends on the I<interval> of the value list
+collectd-threshold.pod:and the global B<Timeout> setting. See the B<Interval> and B<Timeout> settings
+utils_latency.c:* Each bin represents an interval and has a count (frequency) of
+utils_latency.c:* number of values fall within its interval.
+Binary file protocols.o matches
+daemon/utils_tail_match.c:  cdtime_t interval;
+daemon/utils_tail_match.c:  cdtime_t interval;
+daemon/utils_tail_match.c:  vl.interval = data->interval;
+daemon/utils_tail_match.c:  DEBUG ("tail_match_add_match interval %lf", CDTIME_T_TO_DOUBLE(((cu_tail_match_simple_t *)user_data)->interval));
+daemon/utils_tail_match.c:    const char *type, const char *type_instance, const cdtime_t interval)
+daemon/utils_tail_match.c:  user_data->interval = interval;
+daemon/utils_tail_match.h:    const char *type, const char *type_instance, const cdtime_t interval);
+daemon/utils_complain.c:	if (c->last + c->interval > now)
+daemon/utils_complain.c:	if (c->interval < plugin_get_interval ())
+daemon/utils_complain.c:		c->interval = plugin_get_interval ();
+daemon/utils_complain.c:		c->interval *= 2;
+daemon/utils_complain.c:	if (c->interval > TIME_T_TO_CDTIME_T (86400))
+daemon/utils_complain.c:		c->interval = TIME_T_TO_CDTIME_T (86400);
+daemon/utils_complain.c:	if (c->interval == 0)
+daemon/utils_complain.c:	c->interval = 0;
+daemon/plugin.c:	cdtime_t rf_interval;
+daemon/plugin.c:	cdtime_t rf_effective_interval;
+daemon/plugin.c:#ifndef DEFAULT_MAX_READ_INTERVAL
+daemon/plugin.c:# define DEFAULT_MAX_READ_INTERVAL TIME_T_TO_CDTIME_T (86400)
+daemon/plugin.c:static cdtime_t        max_read_interval = DEFAULT_MAX_READ_INTERVAL;
+daemon/plugin.c:		if (rf->rf_interval == 0)
+daemon/plugin.c:			/* this should not happen, because the interval is set
+daemon/plugin.c:			rf->rf_interval = plugin_get_interval ();
+daemon/plugin.c:			rf->rf_effective_interval = rf->rf_interval;
+daemon/plugin.c:		 * intervals in which it will be called. */
+daemon/plugin.c:			rf->rf_effective_interval *= 2;
+daemon/plugin.c:			if (rf->rf_effective_interval > max_read_interval)
+daemon/plugin.c:				rf->rf_effective_interval = max_read_interval;
+daemon/plugin.c:					CDTIME_T_TO_DOUBLE (rf->rf_effective_interval));
+daemon/plugin.c:			/* Success: Restore the interval, if it was changed. */
+daemon/plugin.c:			rf->rf_effective_interval = rf->rf_interval;
+daemon/plugin.c:		DEBUG ("plugin_read_thread: Effective interval of the "
+daemon/plugin.c:				CDTIME_T_TO_DOUBLE (rf->rf_effective_interval));
+daemon/plugin.c:		rf->rf_next_read += rf->rf_effective_interval;
+daemon/plugin.c:	/* Fill in the interval from the thread context, if it is zero. */
+daemon/plugin.c:	if (vl->interval == 0)
+daemon/plugin.c:		if (ctx.interval != 0)
+daemon/plugin.c:			vl->interval = ctx.interval;
+daemon/plugin.c:					"interval from context for "
+daemon/plugin.c:			vl->interval = cf_get_default_interval ();
+daemon/plugin.c:	rf->rf_effective_interval = rf->rf_interval;
+daemon/plugin.c:	rf->rf_interval = plugin_get_interval ();
+daemon/plugin.c:		const struct timespec *interval,
+daemon/plugin.c:	if (interval != NULL)
+daemon/plugin.c:		rf->rf_interval = TIMESPEC_TO_CDTIME_T (interval);
+daemon/plugin.c:		rf->rf_interval = plugin_get_interval ();
+daemon/plugin.c:	max_read_interval = global_option_get_time ("MaxReadInterval",
+daemon/plugin.c:			DEFAULT_MAX_READ_INTERVAL);
+daemon/plugin.c:      /* do not switch plugin context; rather keep the context (interval)
+daemon/plugin.c:    /* do not switch plugin context; rather keep the context (interval)
+daemon/plugin.c:	assert (vl->interval != 0);
+daemon/plugin.c:	DEBUG ("plugin_dispatch_values: time = %.3f; interval = %.3f; "
+daemon/plugin.c:			CDTIME_T_TO_DOUBLE (vl->interval),
+daemon/plugin.c:		 * (interval) information of the calling plugin */
+daemon/plugin.c:		 * (interval) information of the calling plugin */
+daemon/plugin.c:static plugin_ctx_t ctx_init = { /* interval = */ 0 };
+daemon/plugin.c:cdtime_t plugin_get_interval (void)
+daemon/plugin.c:	cdtime_t interval;
+daemon/plugin.c:	interval = plugin_get_ctx().interval;
+daemon/plugin.c:	if (interval > 0)
+daemon/plugin.c:		return interval;
+daemon/plugin.c:	return cf_get_default_interval ();
+daemon/plugin.c:} /* cdtime_t plugin_get_interval */
+Binary file daemon/utils_cache_mock.o matches
+Binary file daemon/collectd-filter_chain.o matches
+daemon/plugin.h:#define plugin_interval (plugin_get_ctx().interval)
+daemon/plugin.h:	cdtime_t interval;
+daemon/plugin.h:#define VALUE_LIST_INIT { NULL, 0, 0, plugin_get_interval (), \
+daemon/plugin.h:	cdtime_t interval;
+daemon/plugin.h:		const struct timespec *interval,
+daemon/plugin.h: *  plugin_get_interval
+daemon/plugin.h: *  This function returns the current value of the plugin's interval. The
+daemon/plugin.h:cdtime_t plugin_get_interval (void);
+daemon/configfile.c:	{"Interval",    NULL, NULL},
+daemon/configfile.c:	{"MaxReadInterval", NULL, "86400"}
+daemon/configfile.c:	/* default to the global interval set before loading this plugin */
+daemon/configfile.c:	ctx.interval = cf_get_default_interval ();
+daemon/configfile.c:		else if (strcasecmp ("Interval", ci->children[i].key) == 0) {
+daemon/configfile.c:			if (cf_util_get_cdtime (ci->children + i, &ctx.interval) != 0) {
+daemon/configfile.c:cdtime_t cf_get_default_interval (void)
+daemon/configfile.c:	return (global_option_get_time ("Interval",
+daemon/configfile.c:			       DOUBLE_TO_CDTIME_T (COLLECTD_DEFAULT_INTERVAL)));
+Binary file daemon/collectd-collectd.o matches
+Binary file daemon/collectd-plugin.o matches
+Binary file daemon/collectd-utils_tail_match.o matches
+daemon/configfile.h:cdtime_t cf_get_default_interval (void);
+Binary file daemon/common.o matches
+Binary file daemon/collectd-utils_threshold.o matches
+Binary file daemon/collectd matches
+daemon/utils_complain.h:	cdtime_t interval;
+daemon/utils_complain.h:	(c)->interval = 0; \
+daemon/utils_complain.h: *   deferred by an increasing interval (up to one day) to prevent flooding
+daemon/utils_complain.h: *   calls to `c_complain', it will report again on the next interval and stop
+daemon/utils_complain.h:#define c_would_release(c) ((c)->interval != 0)
+daemon/collectd.c:cdtime_t interval_g;
+daemon/collectd.c:	interval_g = cf_get_default_interval ();
+daemon/collectd.c:	assert (interval_g > 0);
+daemon/collectd.c:	DEBUG ("interval_g = %.3f;", CDTIME_T_TO_DOUBLE (interval_g));
+daemon/collectd.c:	cdtime_t interval = cf_get_default_interval ();
+daemon/collectd.c:	wait_until = cdtime () + interval;
+daemon/collectd.c:			WARNING ("Not sleeping because the next interval is "
+daemon/collectd.c:			wait_until = now + interval;
+daemon/collectd.c:		wait_until = wait_until + interval;
+daemon/utils_cache.c:	/* Interval in which the data is collected
+daemon/utils_cache.c:	cdtime_t interval;
+daemon/utils_cache.c:	if (vl->interval > 0)
+daemon/utils_cache.c:	    / CDTIME_T_TO_DOUBLE (vl->interval);
+daemon/utils_cache.c:  ce->interval = vl->interval;
+daemon/utils_cache.c:  cdtime_t *keys_interval = NULL;
+daemon/utils_cache.c:    if ((now - ce->last_update) < (ce->interval * timeout_g))
+daemon/utils_cache.c:    tmp_time = realloc (keys_interval, (keys_len + 1) * sizeof (*keys_interval));
+daemon/utils_cache.c:    keys_interval = tmp_time;
+daemon/utils_cache.c:    keys_interval[keys_len] = ce->interval;
+daemon/utils_cache.c:    vl.interval = keys_interval[i];
+daemon/utils_cache.c:  sfree (keys_interval);
+daemon/utils_cache.c:  ce->interval = vl->interval;
+daemon/common.c:	double interval;
+daemon/common.c:	interval = CDTIME_T_TO_DOUBLE(t - state->last_time);
+daemon/common.c:		ret_rate->gauge = (value - state->last_value.derive) / interval;
+daemon/common.c:		ret_rate->gauge = (((counter_t)value) - state->last_value.counter) / interval;
+daemon/common.c:		ret_rate->gauge = (((absolute_t)value) - state->last_value.absolute) / interval;
+Binary file daemon/collectd-configfile.o matches
+Binary file daemon/collectd-utils_cache.o matches
+daemon/collectd.h:#ifndef COLLECTD_DEFAULT_INTERVAL
+daemon/collectd.h:# define COLLECTD_DEFAULT_INTERVAL 10.0
+daemon/collectd.h:extern cdtime_t interval_g;
+Binary file daemon/.libs/utils_cache_mock.o matches
+Binary file daemon/.libs/libcommon.a matches
+Binary file daemon/.libs/common.o matches
+Binary file daemon/.libs/libplugin_mock.a matches
+Binary file daemon/collectd-utils_complain.o matches
+Binary file network_la-network.o matches
+Binary file interface_la-interface.o matches
+collectd.conf:# Interval at which to query values. This may be overwritten on a per-plugin #
+collectd.conf:# base by using the 'Interval' option of the LoadPlugin block:               #
+collectd.conf:#       Interval 60                                                          #
+collectd.conf:#Interval     10
+collectd.conf:#MaxReadInterval 86400
+collectd.conf:#		Interval 60
+collectd.conf:#		Interval      30
+collectd.conf:#			Interval 30
+collectd.conf:#			Interval 30
+collectd.conf:#			Interval 30
+collectd.conf:#			Interval 30
+collectd.conf:#			Interval 30
+collectd.conf:#		ResolveInterval 14400
+collectd.conf:#	Interval 1.0
+collectd.conf:#		Interval 60
+collectd.conf:#		CommitInterval 30
+collectd.conf:#    MinimumInterval 10
+collectd.conf:#       Interval 120
+collectd.conf:#       Interval 300
+collectd.conf:#    Interval 60
+collectd.conf:#       Interval 600
+collectd.conf:#	RefreshInterval 60
+collectd.conf.5:\&  Interval 10.0
+collectd.conf.5:\&    Interval 3600
+collectd.conf.5:different intervals, only one of them (the first one encountered) will take
+collectd.conf.5:\&   Interval 60
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:Sets a plugin-specific interval for collecting metrics. This overrides the
+collectd.conf.5:global \fBInterval\fR setting. If a plugin provides own support for specifying an
+collectd.conf.5:interval, that setting will take precedence.
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:Configures the interval in which to query the read plugins. Obviously smaller
+collectd.conf.5:.IP "\fBMaxReadInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "MaxReadInterval Seconds"
+collectd.conf.5:Read plugin doubles interval between queries after each failed attempt
+collectd.conf.5:This options limits the maximum value of the interval. The default value is
+collectd.conf.5:missing when no update has been received for twice the update interval. Since
+collectd.conf.5:on the \fIInterval\fR information contained in each value list. This is used in
+collectd.conf.5:attempt to reconnect at each read interval (in Subscribe mode) or each time
+collectd.conf.5:milliseconds. By default, the configured \fBInterval\fR is used to set the
+collectd.conf.5:milliseconds. By default, the configured \fBInterval\fR is used to set the
+collectd.conf.5:milliseconds. By default, the configured \fBInterval\fR is used to set the
+collectd.conf.5:milliseconds. By default, the configured \fBInterval\fR is used to set the
+collectd.conf.5:If \fBTimeout\fR is 0 or bigger than the \fBInterval\fR, keep in mind that each slow
+collectd.conf.5:.IP "\fBInterval\fR \fIInterval\fR" 4
+collectd.conf.5:.IX Item "Interval Interval"
+collectd.conf.5:Sets the interval (in seconds) in which the values will be collected from this
+collectd.conf.5:\&\s-1URL.\s0 By default the global \fBInterval\fR setting will be used.
+collectd.conf.5:for intervals 1 min, 5 min and 15 min. Defaults to false.
+collectd.conf.5:\&   Interval 60
+collectd.conf.5:\&   Interval 20
+collectd.conf.5:.IP "\fBInterval\fR \fIInterval\fR" 4
+collectd.conf.5:.IX Item "Interval Interval"
+collectd.conf.5:Sets the interval (in seconds) in which the values will be collected from this
+collectd.conf.5:host. By default the global \fBInterval\fR setting will be used.
+collectd.conf.5:\&    Interval      30
+collectd.conf.5:\&      Interval 30
+collectd.conf.5:\&      Interval 30
+collectd.conf.5:\&      Interval 30
+collectd.conf.5:\&      Interval 30
+collectd.conf.5:\&      Interval 60
+collectd.conf.5:\&      Interval 30
+collectd.conf.5:\&      Interval 30
+collectd.conf.5:\&      Interval 60
+collectd.conf.5:.IP "\fBInterval\fR \fIInterval\fR" 4
+collectd.conf.5:.IX Item "Interval Interval"
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:.IP "\fBResolveInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "ResolveInterval Seconds"
+collectd.conf.5:Sets the interval at which to re-resolve the \s-1DNS\s0 for the \fIHost\fR. This is
+collectd.conf.5:milliseconds. By default, the configured \fBInterval\fR is used to set the
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:Sets the interval in which all sensors should be read. If not specified, the
+collectd.conf.5:global \fBInterval\fR setting is used.
+collectd.conf.5:interval). We will probably add some separate thread for reading the sensors
+collectd.conf.5:is then dispatched to the daemon once per interval.
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:Sets the interval in which to send \s-1ICMP\s0 echo packets to the configured hosts.
+collectd.conf.5:This is \fBnot\fR the interval in which statistics are queries from the plugin but
+collectd.conf.5:the interval in which the hosts are \*(L"pinged\*(R". Therefore, the setting here
+collectd.conf.5:should be smaller than or equal to the global \fBInterval\fR setting. Fractional
+collectd.conf.5:\&\fBInterval\fR setting above for the plugin to work correctly. Fractional
+collectd.conf.5:\&      Interval 300
+collectd.conf.5:\&      CommitInterval 10
+collectd.conf.5:.IP "\fBParam\fR \fIhostname\fR|\fIdatabase\fR|\fIusername\fR|\fIinterval\fR" 4
+collectd.conf.5:.IX Item "Param hostname|database|username|interval"
+collectd.conf.5:.IP "\fIinterval\fR" 4
+collectd.conf.5:.IX Item "interval"
+collectd.conf.5:The interval with which this database is queried (as specified by the database
+collectd.conf.5:specific or global \fBInterval\fR options).
+collectd.conf.5:.IP "\fBInterval\fR \fIseconds\fR" 4
+collectd.conf.5:.IX Item "Interval seconds"
+collectd.conf.5:Specify the interval with which the database should be queried. The default is
+collectd.conf.5:to use the global \fBInterval\fR setting.
+collectd.conf.5:.IP "\fBCommitInterval\fR \fIseconds\fR" 4
+collectd.conf.5:.IX Item "CommitInterval seconds"
+collectd.conf.5:transactions enabled (see the \fBCommitInterval\fR option above). When issuing
+collectd.conf.5:than \fBInterval\fR defined globally.
+collectd.conf.5:this setting is unset and the stepsize is set to the interval in which the data
+collectd.conf.5:the interval in which data is collected. Do not set this option unless you have
+collectd.conf.5:this setting is unset and the stepsize is set to the interval in which the data
+collectd.conf.5:the interval in which data is collected. Do not set this option unless you have
+collectd.conf.5:\&      MinimumInterval 10
+collectd.conf.5:.IP "\fBMinimumInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "MinimumInterval Seconds"
+collectd.conf.5:The default \fBMinimumInterval\fR is \fB0\fR, meaning measurements received from the
+collectd.conf.5:These options control what happens if metrics are not updated in an interval.
+collectd.conf.5:an interval. If set to \fBFalse\fR, the default, these values aren't calculated /
+collectd.conf.5:\&      Interval 60
+collectd.conf.5:The \fBInterval\fR option allows you to define the length of time between reads. If
+collectd.conf.5:this is not set, the default Interval will be used.
+collectd.conf.5:\&       Interval 600
+collectd.conf.5:which configure which file to read, in which interval and which metrics to
+collectd.conf.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd.conf.5:.IX Item "Interval Seconds"
+collectd.conf.5:Configures the interval in which to read values from this instance / file.
+collectd.conf.5:Defaults to the plugin's default interval.
+collectd.conf.5:.IP "\fBRefreshInterval\fR \fIseconds\fR" 4
+collectd.conf.5:.IX Item "RefreshInterval seconds"
+collectd.conf.5:seconds. Setting this to be the same or smaller than the \fIInterval\fR will cause
+collectd.conf.5:slightly below this interval, which you can estimate by monitoring the network
+collectd.conf.5:regular intervals or when \fBBatchMaxSize\fR is exceeded.
+collectd.conf.5:metrics interval setting. This setting controls the factor with which the
+collectd.conf.5:interval is multiplied to set the \s-1TTL.\s0 The default value is \fB2.0\fR. Unless you
+collectd.conf.5:take a little longer because the timeout is checked only once each \fBInterval\fR
+collectd.conf.5:missing value is generated once every \fBInterval\fR seconds. If set to \fBfalse\fR
+nginx.c:       CDTIME_T_TO_MS(plugin_get_interval()));
+gmond.c:  se->vl.interval = 0;
+gmond.c:  if (se->vl.interval == 0)
+gmond.c:        se->vl.interval = TIME_T_TO_CDTIME_T (msg_meta.metric.tmax);
+Binary file target_v5upgrade.o matches
+Binary file turbostat.o matches
+collectd-snmp.5:\&      Interval 120
+collectd-snmp.5:\&      Interval 300
+collectd-snmp.5:.IP "\fBInterval\fR \fISeconds\fR" 4
+collectd-snmp.5:.IX Item "Interval Seconds"
+collectd-tg.c:#define DEF_INTERVAL       10.0
+collectd-tg.c:static double conf_interval = DEF_INTERVAL;
+collectd-tg.c:      "    -i <seconds>   Interval of each value in seconds. (Default: %.3f)\n"
+collectd-tg.c:      DEF_INTERVAL,
+collectd-tg.c:  vl->interval = conf_interval;
+collectd-tg.c:    + (host_num % (1 + (int) vl->interval));
+collectd-tg.c:  vl->time += vl->interval;
+collectd-tg.c:        get_double_opt (optarg, &conf_interval);
+Binary file olsrd.o matches
+collectd-unixsock.5:.IP "\fBinterval=\fR\fIseconds\fR" 4
+collectd-unixsock.5:.IX Item "interval=seconds"
+collectd-unixsock.5:Gives the interval in which the data identified by \fIIdentifier\fR is being
+collectd-unixsock.5:  \-> | \s-1PUTVAL\s0 testhost/interface/if_octets\-test0 interval=10 1179574444:123:456
+Binary file ipc_la-ipc.o matches
+Binary file nfs.o matches
+Binary file apcups.o matches
+sigrok.c:/* Minimum interval between dispatches coming from this plugin. The RRD
+sigrok.c: * plugin, at least, complains when written to with sub-second intervals.*/
+sigrok.c:#define DEFAULT_MIN_DISPATCH_INTERVAL TIME_T_TO_CDTIME_T(0)
+sigrok.c:	cdtime_t min_dispatch_interval;
+sigrok.c:	cfdev->min_dispatch_interval = DEFAULT_MIN_DISPATCH_INTERVAL;
+sigrok.c:		else if (!strcasecmp(item->key, "minimuminterval"))
+sigrok.c:			cf_util_get_cdtime(item, &cfdev->min_dispatch_interval);
+sigrok.c:	if ((cfdev->min_dispatch_interval != 0)
+sigrok.c:				< cfdev->min_dispatch_interval))
+collectd-exec.pod:I<Interval> seconds. It is perfectly legal for the executable to run for a long
+collectd-exec.pod:executed every I<Interval> seconds. If I<Interval> is short (the default is 10
+collectd-exec.pod:=item B<interval=>I<seconds>
+collectd-exec.pod:Gives the interval in which the data identified by I<Identifier> is being
+collectd-exec.pod:  PUTVAL alice/interface/if_octets-eth0 interval=10 1180647081:421465:479194
+collectd-exec.pod:=item COLLECTD_INTERVAL
+collectd-exec.pod:Value of the global interval setting.
+utils_rrdcreate.c:   * interval of the value-list. */
+utils_rrdcreate.c:    ss = (int) CDTIME_T_TO_TIME_T (vl->interval);
+utils_rrdcreate.c:        : (int) CDTIME_T_TO_TIME_T (2 * vl->interval),
+utils_rrdcreate.c:    stepsize = (unsigned long) CDTIME_T_TO_TIME_T (vl->interval);
+exec.c:      CDTIME_T_TO_DOUBLE (plugin_get_interval ()));
+exec.c:  setenv ("COLLECTD_INTERVAL", buffer, /* overwrite = */ 1);
+exec.c:  ssnprintf (buffer, sizeof (buffer), "COLLECTD_INTERVAL=%.3f",
+exec.c:      CDTIME_T_TO_DOUBLE (plugin_get_interval ()));
+netapp.c:struct cna_interval_s
+netapp.c:	cdtime_t interval;
+netapp.c:typedef struct cna_interval_s cna_interval_t;
+netapp.c:	cna_interval_t interval;
+netapp.c:	cna_interval_t interval;
+netapp.c:	cna_interval_t interval;
+netapp.c:	cna_interval_t interval;
+netapp.c:	cna_interval_t interval;
+netapp.c:	cna_interval_t interval;
+netapp.c:	cna_interval_t interval;
+netapp.c:	cdtime_t interval;
+netapp.c:		cdtime_t timestamp, cdtime_t interval)
+netapp.c:	if (interval > 0)
+netapp.c:		vl.interval = interval;
+netapp.c:		cdtime_t timestamp, cdtime_t interval)
+netapp.c:				values, 2, timestamp, interval));
+netapp.c:		cdtime_t timestamp, cdtime_t interval)
+netapp.c:				&v, 1, timestamp, interval));
+netapp.c:		cdtime_t timestamp, cdtime_t interval)
+netapp.c:				values, 2, timestamp, interval));
+netapp.c:		cdtime_t timestamp, cdtime_t interval)
+netapp.c:				&v, 1, timestamp, interval));
+netapp.c:		cdtime_t interval)
+netapp.c:				&v, 1, timestamp, interval));
+netapp.c:		cfg_wafl_t *old_data, const cfg_wafl_t *new_data, cdtime_t interval)
+netapp.c:				new_data->timestamp, interval);
+netapp.c:				new_data->timestamp, interval);
+netapp.c:				new_data->timestamp, interval);
+netapp.c:				new_data->timestamp, interval);
+netapp.c:		const data_volume_perf_t *new_data, int interval)
+netapp.c:				(derive_t) new_data->read_bytes, (derive_t) new_data->write_bytes, new_data->timestamp, interval);
+netapp.c:				(derive_t) new_data->read_ops, (derive_t) new_data->write_ops, new_data->timestamp, interval);
+netapp.c:				latency_per_op_read, latency_per_op_write, new_data->timestamp, interval);
+netapp.c:		na_elem_t *data, cdtime_t interval)
+netapp.c:	return (submit_wafl_data (hostname, plugin_inst, cfg_wafl, &perf_data, interval));
+netapp.c:	if ((host->cfg_wafl->interval.interval + host->cfg_wafl->interval.last_read) > now)
+netapp.c:			host->cfg_wafl->interval.interval);
+netapp.c:		host->cfg_wafl->interval.last_read = now;
+netapp.c:		cfg_disk_t *cfg_disk, na_elem_t *data, cdtime_t interval)
+netapp.c:				worst_disk->disk_busy_percent, timestamp, interval);
+netapp.c:	if ((host->cfg_disk->interval.interval + host->cfg_disk->interval.last_read) > now)
+netapp.c:			host->cfg_disk->interval.interval);
+netapp.c:		host->cfg_disk->interval.last_read = now;
+netapp.c:		cfg_volume_perf_t *cvp, na_elem_t *data, cdtime_t interval)
+netapp.c:		submit_volume_perf_data (hostname, v, &perf_data, interval);
+netapp.c:	if ((host->cfg_volume_perf->interval.interval + host->cfg_volume_perf->interval.last_read) > now)
+netapp.c:			host->cfg_volume_perf->interval.interval);
+netapp.c:		host->cfg_volume_perf->interval.last_read = now;
+netapp.c:		cfg_volume_usage_t *cfg_volume, int interval)
+netapp.c:					(double) norm_free, /* timestamp = */ 0, interval);
+netapp.c:					(double) sis_saved, /* timestamp = */ 0, interval);
+netapp.c:					(double) compress_saved, /* timestamp = */ 0, interval);
+netapp.c:					(double) dedup_saved, /* timestamp = */ 0, interval);
+netapp.c:					(double) norm_used, /* timestamp = */ 0, interval);
+netapp.c:					(double) snap_reserve_free, /* timestamp = */ 0, interval);
+netapp.c:					(double) snap_reserve_used, /* timestamp = */ 0, interval);
+netapp.c:					(double) snap_norm_used, /* timestamp = */ 0, interval);
+netapp.c:				host->cfg_volume_usage->interval.interval));
+netapp.c:	if ((host->cfg_volume_usage->interval.interval + host->cfg_volume_usage->interval.last_read) > now)
+netapp.c:		host->cfg_volume_usage->interval.last_read = now;
+netapp.c:					host->cfg_quota->interval.interval);
+netapp.c:					host->cfg_quota->interval.interval);
+netapp.c:	if ((host->cfg_quota->interval.interval + host->cfg_quota->interval.last_read) > now)
+netapp.c:		host->cfg_quota->interval.last_read = now;
+netapp.c:		cfg_snapvault_t *cfg_snapvault, na_elem_t *data, cdtime_t interval)
+netapp.c:				(double)value, /* timestamp = */ 0, interval);
+netapp.c:					(double)value, /* timestamp = */ 0, interval);
+netapp.c:					value, /* timestamp = */ 0, interval);
+netapp.c:				host->cfg_snapvault->interval.interval);
+netapp.c:	if ((host->cfg_snapvault->interval.interval + host->cfg_snapvault->interval.last_read) > now)
+netapp.c:		host->cfg_snapvault->interval.last_read = now;
+netapp.c:		cfg_system_t *cfg_system, na_elem_t *data, int interval)
+netapp.c:					(derive_t) value, timestamp, interval);
+netapp.c:				disk_read, disk_written, timestamp, interval);
+netapp.c:				net_recv, net_sent, timestamp, interval);
+netapp.c:				cpu_busy, timestamp, interval);
+netapp.c:				cpu_total - cpu_busy, timestamp, interval);
+netapp.c:	if ((host->cfg_system->interval.interval + host->cfg_system->interval.last_read) > now)
+netapp.c:			host->cfg_system->interval.interval);
+netapp.c:		host->cfg_system->interval.last_read = now;
+netapp.c:/* Handling of the "Interval" option which is allowed in every block. */
+netapp.c:static int cna_config_get_interval (const oconfig_item_t *ci, /* {{{ */
+netapp.c:		cna_interval_t *out_interval)
+netapp.c:	out_interval->interval = tmp;
+netapp.c:	out_interval->last_read = 0;
+netapp.c:} /* }}} int cna_config_get_interval */
+netapp.c:		if (strcasecmp(item->key, "Interval") == 0)
+netapp.c:			cna_config_get_interval (item, &cfg_volume_perf->interval);
+netapp.c:		if (strcasecmp (item->key, "Interval") == 0)
+netapp.c:			cna_config_get_interval (item, &cfg_quota->interval);
+netapp.c:		if (strcasecmp(item->key, "Interval") == 0)
+netapp.c:			cna_config_get_interval (item, &cfg_disk->interval);
+netapp.c:		if (strcasecmp(item->key, "Interval") == 0)
+netapp.c:			cna_config_get_interval (item, &cfg_wafl->interval);
+netapp.c:		if (strcasecmp(item->key, "Interval") == 0)
+netapp.c:			cna_config_get_interval (item, &cfg_volume_usage->interval);
+netapp.c:		if (strcasecmp (item->key, "Interval") == 0)
+netapp.c:			cna_config_get_interval (item, &cfg_snapvault->interval);
+netapp.c:		if (strcasecmp(item->key, "Interval") == 0) {
+netapp.c:			cna_config_get_interval (item, &cfg_system->interval);
+netapp.c:	clone->interval = host->interval;
+netapp.c:	struct timespec interval;
+netapp.c:	CDTIME_T_TO_TIMESPEC (host->interval, &interval);
+netapp.c:			/* interval  = */ (host->interval > 0) ? &interval : NULL,
+netapp.c:		} else if (!strcasecmp(item->key, "Interval")) {
+netapp.c:			status = cf_util_get_cdtime (item, &host->interval);
+apcups.c:        /* When collectd's collection interval is larger than apcupsd's
+java.c:  /* Set the `interval' member.. */
+java.c:      (jlong) CDTIME_T_TO_MS (vl->interval),
+java.c:      c_valuelist, o_valuelist, "setInterval");
+java.c:    ERROR ("java plugin: ctoj_value_list: ctoj_long (setInterval) failed.");
+java.c:      class_ptr, object_ptr, "getInterval");
+java.c:    ERROR ("java plugin: jtoc_value_list: jtoc_long (getInterval) failed.");
+java.c:  vl->interval = MS_TO_CDTIME_T (tmp_long);
+java.c:      /* interval = */ NULL, &ud);
+Binary file conntrack.o matches
+Binary file target_scale.o matches
+modbus.c: *   Interval 60
+modbus.c:  cdtime_t interval;
+modbus.c:  if (host->interval <= 0)
+modbus.c:    host->interval = plugin_get_interval ();
+modbus.c:  vl.interval = host->interval;
+modbus.c:    else if (strcasecmp ("Interval", child->key) == 0)
+modbus.c:      status = cf_util_get_cdtime (child, &host->interval);
+modbus.c:    struct timespec interval = { 0, 0 };
+modbus.c:    CDTIME_T_TO_TIMESPEC (host->interval, &interval);
+modbus.c:        /* interval = */ (host->interval > 0) ? &interval : NULL,
+collectd-java.pod:Java "read"-methods are not suspended for increasing intervals like C
+rrdtool.c: * is zero a default, depending on the `interval' member of the value list is
+csv.c:			 "PUTVAL %s interval=%.3f %s\n",
+csv.c:			 CDTIME_T_TO_DOUBLE (vl->interval),
+oracle.c:      /* interval = */ 0);
+Binary file tcpconns.o matches
+Binary file df.o matches
+collectdctl.c:      " * putval <identifier> [interval=<seconds>] <value-list(s)>\n"
+collectdctl.c:      if (strcasecmp (key, "interval") == 0) {
+collectdctl.c:        vl.interval = strtol (value, &endptr, 0);
+collectdctl.c:          fprintf (stderr, "ERROR: Failed to parse interval as number: %s.\n",
+collectdctl.c:              "interval: %s.\n", endptr);
+Binary file fscache.o matches
+Binary file write_graphite.o matches
+Binary file statsd.o matches
+Binary file match_empty_counter.o matches
+Binary file utils_cmd_getthreshold.o matches
+Binary file utils_cmd_putval.o matches
+Binary file serial.o matches
+dns.c:			(int) CDTIME_T_TO_MS (plugin_get_interval () / 2),
+dns.c:static int dns_sleep_one_interval (void) /* {{{ */
+dns.c:	cdtime_t interval;
+dns.c:	interval = plugin_get_interval ();
+dns.c:	CDTIME_T_TO_TIMESPEC (interval, &ts);
+dns.c:} /* }}} int dns_sleep_one_interval */
+dns.c:		dns_sleep_one_interval ();
+utils_format_json.c:  BUFFER_ADD (",\"interval\":%.3f", CDTIME_T_TO_DOUBLE (vl->interval));
+Binary file wireless.o matches
+Binary file tail_csv.o matches
+Binary file teamspeak2.o matches
+Binary file match_value.o matches
+utils_db_query.h:    char **column_names, size_t column_num, cdtime_t interval);
+collectdctl.1:.IP "\fBputval\fR \fI<identifier>\fR [\fBinterval=\fR\fI<seconds>\fR] \fI<value\-list(s)>\fR" 4
+collectdctl.1:.IX Item "putval <identifier> [interval=<seconds>] <value-list(s)>"
+collectdctl.1:to the daemon which will then dispatch them to the write plugins. \fBinterval\fR
+collectdctl.1:specifies the interval (in seconds) used to collect the values following that
+Binary file collectd_tg-collectd-tg.o matches
+Binary file thermal.o matches
+virt.c:    "RefreshInterval",
+virt.c:static int interval = 60;
+virt.c:    if (strcasecmp (key, "RefreshInterval") == 0) {
+virt.c:        interval = strtol (value, &eptr, 10);
+virt.c:            ((interval > 0) && ((last_refresh + interval) <= t))) {
+collectd.conf.pod:  Interval 10.0
+collectd.conf.pod:    Interval 3600
+collectd.conf.pod:different intervals, only one of them (the first one encountered) will take
+collectd.conf.pod:   Interval 60
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:Sets a plugin-specific interval for collecting metrics. This overrides the
+collectd.conf.pod:global B<Interval> setting. If a plugin provides own support for specifying an
+collectd.conf.pod:interval, that setting will take precedence.
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:Configures the interval in which to query the read plugins. Obviously smaller
+collectd.conf.pod:=item B<MaxReadInterval> I<Seconds>
+collectd.conf.pod:Read plugin doubles interval between queries after each failed attempt
+collectd.conf.pod:This options limits the maximum value of the interval. The default value is
+collectd.conf.pod:missing when no update has been received for twice the update interval. Since
+collectd.conf.pod:on the I<Interval> information contained in each value list. This is used in
+collectd.conf.pod:attempt to reconnect at each read interval (in Subscribe mode) or each time
+collectd.conf.pod:milliseconds. By default, the configured B<Interval> is used to set the
+collectd.conf.pod:milliseconds. By default, the configured B<Interval> is used to set the
+collectd.conf.pod:milliseconds. By default, the configured B<Interval> is used to set the
+collectd.conf.pod:milliseconds. By default, the configured B<Interval> is used to set the
+collectd.conf.pod:If B<Timeout> is 0 or bigger than the B<Interval>, keep in mind that each slow
+collectd.conf.pod:=item B<Interval> I<Interval>
+collectd.conf.pod:Sets the interval (in seconds) in which the values will be collected from this
+collectd.conf.pod:URL. By default the global B<Interval> setting will be used.
+collectd.conf.pod:for intervals 1 min, 5 min and 15 min. Defaults to false.
+collectd.conf.pod:   Interval 60
+collectd.conf.pod:   Interval 20
+collectd.conf.pod:=item B<Interval> I<Interval>
+collectd.conf.pod:Sets the interval (in seconds) in which the values will be collected from this
+collectd.conf.pod:host. By default the global B<Interval> setting will be used.
+collectd.conf.pod:    Interval      30
+collectd.conf.pod:      Interval 30
+collectd.conf.pod:      Interval 30
+collectd.conf.pod:      Interval 30
+collectd.conf.pod:      Interval 30
+collectd.conf.pod:      Interval 60
+collectd.conf.pod:      Interval 30
+collectd.conf.pod:      Interval 30
+collectd.conf.pod:      Interval 60
+collectd.conf.pod:=item B<Interval> I<Interval>
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:=item B<ResolveInterval> I<Seconds>
+collectd.conf.pod:Sets the interval at which to re-resolve the DNS for the I<Host>. This is
+collectd.conf.pod:milliseconds. By default, the configured B<Interval> is used to set the
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:Sets the interval in which all sensors should be read. If not specified, the
+collectd.conf.pod:global B<Interval> setting is used.
+collectd.conf.pod:interval). We will probably add some separate thread for reading the sensors
+collectd.conf.pod:is then dispatched to the daemon once per interval.
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:Sets the interval in which to send ICMP echo packets to the configured hosts.
+collectd.conf.pod:This is B<not> the interval in which statistics are queries from the plugin but
+collectd.conf.pod:the interval in which the hosts are "pinged". Therefore, the setting here
+collectd.conf.pod:should be smaller than or equal to the global B<Interval> setting. Fractional
+collectd.conf.pod:B<Interval> setting above for the plugin to work correctly. Fractional
+collectd.conf.pod:      Interval 300
+collectd.conf.pod:      CommitInterval 10
+collectd.conf.pod:=item B<Param> I<hostname>|I<database>|I<username>|I<interval>
+collectd.conf.pod:=item I<interval>
+collectd.conf.pod:The interval with which this database is queried (as specified by the database
+collectd.conf.pod:specific or global B<Interval> options).
+collectd.conf.pod:=item B<Interval> I<seconds>
+collectd.conf.pod:Specify the interval with which the database should be queried. The default is
+collectd.conf.pod:to use the global B<Interval> setting.
+collectd.conf.pod:=item B<CommitInterval> I<seconds>
+collectd.conf.pod:transactions enabled (see the B<CommitInterval> option above). When issuing
+collectd.conf.pod:than B<Interval> defined globally.
+collectd.conf.pod:this setting is unset and the stepsize is set to the interval in which the data
+collectd.conf.pod:the interval in which data is collected. Do not set this option unless you have
+collectd.conf.pod:this setting is unset and the stepsize is set to the interval in which the data
+collectd.conf.pod:the interval in which data is collected. Do not set this option unless you have
+collectd.conf.pod:      MinimumInterval 10
+collectd.conf.pod:=item B<MinimumInterval> I<Seconds>
+collectd.conf.pod:The default B<MinimumInterval> is B<0>, meaning measurements received from the
+collectd.conf.pod:These options control what happens if metrics are not updated in an interval.
+collectd.conf.pod:an interval. If set to B<False>, the default, these values aren't calculated /
+collectd.conf.pod:      Interval 60
+collectd.conf.pod:The B<Interval> option allows you to define the length of time between reads. If
+collectd.conf.pod:this is not set, the default Interval will be used.
+collectd.conf.pod:       Interval 600
+collectd.conf.pod:which configure which file to read, in which interval and which metrics to
+collectd.conf.pod:=item B<Interval> I<Seconds>
+collectd.conf.pod:Configures the interval in which to read values from this instance / file.
+collectd.conf.pod:Defaults to the plugin's default interval.
+collectd.conf.pod:=item B<RefreshInterval> I<seconds>
+collectd.conf.pod:seconds. Setting this to be the same or smaller than the I<Interval> will cause
+collectd.conf.pod:slightly below this interval, which you can estimate by monitoring the network
+collectd.conf.pod:regular intervals or when B<BatchMaxSize> is exceeded.
+collectd.conf.pod:metrics interval setting. This setting controls the factor with which the
+collectd.conf.pod:interval is multiplied to set the TTL. The default value is B<2.0>. Unless you
+collectd.conf.pod:take a little longer because the timeout is checked only once each B<Interval>
+collectd.conf.pod:missing value is generated once every B<Interval> seconds. If set to B<false>
+Binary file write_log.o matches
+Binary file powerdns.o matches
+routeros.c:	cr_read, /* interval = */ NULL, &user_data);
+curl_xml.c:       CDTIME_T_TO_MS(plugin_get_interval()));
+curl_xml.c:                                  /* interval = */ NULL, &ud);
+collectd-perl.pod:per interval (see the B<Interval> configuration option of collectd). Usually
+collectd-perl.pod:    interval => plugin_get_interval (),
+collectd-perl.pod:=item B<plugin_get_interval> ()
+collectd-perl.pod:Returns the interval of the current plugin as a floating point number in
+collectd-perl.pod:seconds. This value depends on the interval configured within the
+collectd-perl.pod:C<LoadPlugin perl> block or the global interval (see L<collectd.conf(5)> for
+collectd-perl.pod:=item B<$interval_g>
+collectd-perl.pod:This variable keeps the interval in seconds in which the read functions are
+collectd-perl.pod:queried (see the B<Interval> configuration option).
+collectd-perl.pod:C<plugin_get_interval()> (see above). This function takes any plugin-specific
+collectd-perl.pod:interval settings into account (see the C<Interval> option of C<LoadPlugin> in
+collectd-perl.pod:=item B<$interval_g>
+tail_csv.c:    cdtime_t interval;
+tail_csv.c:    vl.interval = id->interval;
+tail_csv.c:    struct timespec cb_interval;
+tail_csv.c:    /* Use default interval. */
+tail_csv.c:    id->interval = plugin_get_interval();
+tail_csv.c:        else if (strcasecmp("Interval", option->key) == 0)
+tail_csv.c:            cf_util_get_cdtime(option, &id->interval);
+tail_csv.c:    CDTIME_T_TO_TIMESPEC(id->interval, &cb_interval);
+tail_csv.c:    status = plugin_register_complex_read(NULL, cb_name, tcsv_read, &cb_interval, &cb_data);
+Binary file openvpn_la-openvpn.o matches
+Binary file target_notification.o matches
+collectd-python.pod:per interval (see the B<Interval> configuration option of collectd). Usually
+collectd-python.pod:=item B<dispatch>([type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) -> None.
+collectd-python.pod:=item B<write>([destination][, type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) -> None.
+collectd-python.pod:=item interval
+collectd-python.pod:The interval is the timespan in seconds between two submits for the same data
+collectd-python.pod:If you submit values more often than the specified interval, the average will
+collectd-python.pod:similar to Values but has a severity and a message instead of interval
+collectd-python.pod:=item B<dispatch>([type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) -> None.  Dispatch a value list.
+collectd-python.pod:=item register_read(callback[, interval][, data][, name]) -> I<identifier>
+collectd-python.pod:This function takes an additional parameter: I<interval>. It specifies the
+collectd-python.pod:an increasing interval.
+Binary file contextswitch.o matches
+Binary file cgroups.o matches
+collectd-java.5:Java \*(L"read\*(R"\-methods are not suspended for increasing intervals like C
+utils_cmd_putval.c:	if (strcasecmp ("interval", key) == 0)
+utils_cmd_putval.c:			vl->interval = DOUBLE_TO_CDTIME_T (tmp);
+utils_cmd_putval.c:			"PUTVAL %s interval=%.3f %s",
+utils_cmd_putval.c:			(vl->interval > 0)
+utils_cmd_putval.c:			? CDTIME_T_TO_DOUBLE (vl->interval)
+utils_cmd_putval.c:			: CDTIME_T_TO_DOUBLE (plugin_get_interval ()),
+Binary file zookeeper.o matches
+collectd-tg.1:collectd-tg \fB\-n\fR \fInum_vl\fR \fB\-H\fR \fInum_hosts\fR \fB\-p\fR \fInum_plugins\fR \fB\-i\fR \fIinterval\fR \fB\-d\fR \fIdest\fR \fB\-D\fR \fIdport\fR
+collectd-tg.1:.IP "\fB\-i\fR \fIinterval\fR" 4
+collectd-tg.1:.IX Item "-i interval"
+collectd-tg.1:Sets the interval in which each \fIvalue list\fR is dispatched. Defaults to 10.0
+write_graphite.c:#ifndef WG_MIN_RECONNECT_INTERVAL
+write_graphite.c:# define WG_MIN_RECONNECT_INTERVAL TIME_T_TO_CDTIME_T (1)
+write_graphite.c:    if ((now - cb->last_connect_time) < WG_MIN_RECONNECT_INTERVAL)
+Binary file utils_format_graphite.o matches
+bind.c:      (long) timeout : CDTIME_T_TO_MS(plugin_get_interval()));
+Binary file uptime_la-uptime.o matches
+ipmi.c:  time_t iv = CDTIME_T_TO_TIME_T (plugin_get_interval ());
+curl_json.c:  cdtime_t interval;
+curl_json.c:  else if (db->interval > 0)
+curl_json.c:        CDTIME_T_TO_MS(plugin_get_interval()));
+curl_json.c:    else if (strcasecmp ("Interval", child->key) == 0)
+curl_json.c:      status = cf_util_get_cdtime(child, &db->interval);
+curl_json.c:    struct timespec interval = { 0, 0 };
+curl_json.c:    CDTIME_T_TO_TIMESPEC (db->interval, &interval);
+curl_json.c:                                  /* interval = */ (db->interval > 0) ? &interval : NULL,
+curl_json.c:  if (db->interval > 0)
+curl_json.c:    vl.interval = db->interval;
+Binary file tail.o matches
+curl.c:       CDTIME_T_TO_MS(plugin_get_interval()));
+Binary file match_regex.o matches
+Binary file table.o matches
+Binary file target_set.o matches
+Binary file swap_la-swap.o matches
+Binary file collectdctl-collectdctl.o matches
+libcollectdclient/network_buffer.c:#define TYPE_INTERVAL        0x0007
+libcollectdclient/network_buffer.c:#define TYPE_INTERVAL_HR     0x0009
+libcollectdclient/network_buffer.c:  if (nb->state.interval != vl->interval)
+libcollectdclient/network_buffer.c:    if (nb_add_time (&buffer, &buffer_size, TYPE_INTERVAL_HR, vl->interval))
+libcollectdclient/network_buffer.c:    nb->state.interval = vl->interval;
+libcollectdclient/collectd/client.h:  double   interval;
+Binary file libcollectdclient/libcollectdclient_la-client.o matches
+Binary file libcollectdclient/libcollectdclient_la-network.o matches
+Binary file libcollectdclient/libcollectdclient_la-network_buffer.o matches
+libcollectdclient/client.c:  if (vl->interval > 0.0)
+libcollectdclient/client.c:    SSTRCATF (command, " interval=%.3f", vl->interval);
+Binary file libcollectdclient/.libs/libcollectdclient.so.1.0.0 matches
+Binary file libcollectdclient/.libs/libcollectdclient.a matches
+Binary file libcollectdclient/.libs/libcollectdclient_la-client.o matches
+Binary file libcollectdclient/.libs/libcollectdclient_la-network.o matches
+Binary file libcollectdclient/.libs/libcollectdclient_la-network_buffer.o matches
+Binary file disk_la-disk.o matches
+Binary file ipvs_la-ipvs.o matches
+target_v5upgrade.c:  /* Copy everything: Time, interval, host, ... */
+target_v5upgrade.c:  /* Copy everything: Time, interval, host, ... */
+target_v5upgrade.c:  /* Copy everything: Time, interval, host, ... */
+target_v5upgrade.c:  /* Copy everything: Time, interval, host, ... */
+target_v5upgrade.c:  /* Copy everything: Time, interval, host, ... */
+target_v5upgrade.c:  /* Copy everything: Time, interval, host, ... */
+target_v5upgrade.c:  /* Copy everything: Time, interval, host, ... */
+target_v5upgrade.c:  /* Copy everything: Time, interval, host, ... */
+target_scale.c:		rate = ((double) difference) / CDTIME_T_TO_DOUBLE (vl->interval);
+target_scale.c:		int_fraction += (rate * CDTIME_T_TO_DOUBLE (vl->interval));
+target_scale.c:		rate = ((double) difference) / CDTIME_T_TO_DOUBLE (vl->interval);
+target_scale.c:		int_fraction += (rate * CDTIME_T_TO_DOUBLE (vl->interval));
+target_scale.c:	rate = ((double) curr_absolute) / CDTIME_T_TO_DOUBLE (vl->interval);
+target_scale.c:	int_fraction += (rate * CDTIME_T_TO_DOUBLE (vl->interval));
+Binary file csv.o matches
+ascent.c:       CDTIME_T_TO_MS(plugin_get_interval()));
+Binary file write_sensu.o matches
+apache.c:				/* interval  = */ NULL,
+apache.c:				CDTIME_T_TO_MS(plugin_get_interval()));
+collectd-snmp.pod:      Interval 120
+collectd-snmp.pod:      Interval 300
+collectd-snmp.pod:=item B<Interval> I<Seconds>
+disk.c:	double interval = CDTIME_T_TO_DOUBLE (plugin_get_interval ());
+disk.c:	double avg_time_incr = interval * avg_time;
+Binary file filecount.o matches
+Binary file vmem.o matches
+Binary file hddtemp.o matches
+Binary file load_la-load.o matches
+Binary file zfs_arc_la-zfs_arc.o matches
+Binary file exec.o matches
+postgresql.c:	C_PSQL_PARAM_INTERVAL,
+postgresql.c:	cdtime_t interval;
+postgresql.c:	cdtime_t commit_interval;
+postgresql.c:			db->next_commit = cdtime() + db->commit_interval;
+postgresql.c:	db->interval   = 0;
+postgresql.c:	db->commit_interval = 0;
+postgresql.c:		if (0 == db->conn_complaint.interval)
+postgresql.c:			db->conn_complaint.interval = 1;
+postgresql.c:		if (0 == db->conn_complaint.interval)
+postgresql.c:			db->conn_complaint.interval = 1;
+postgresql.c:	char  interval[64];
+postgresql.c:			case C_PSQL_PARAM_INTERVAL:
+postgresql.c:				ssnprintf (interval, sizeof (interval), "%.3f",
+postgresql.c:						(db->interval > 0)
+postgresql.c:						? CDTIME_T_TO_DOUBLE (db->interval)
+postgresql.c:						: plugin_get_interval ());
+postgresql.c:				params[i] = interval;
+postgresql.c:			db->instance, column_names, (size_t) column_num, db->interval);
+postgresql.c:	if( db->expire_delay > 0 && vl->time < (cdtime() - vl->interval - db->expire_delay) ) {
+postgresql.c:	if ((db->commit_interval > 0)
+postgresql.c:		 * interval as in that case all requested data has already been
+postgresql.c:		if ((db->next_commit > 0) && (db->commit_interval > timeout))
+postgresql.c:	else if (0 == strcasecmp (param_str, "interval"))
+postgresql.c:		data->params[data->params_num] = C_PSQL_PARAM_INTERVAL;
+postgresql.c:	struct timespec cb_interval = { 0, 0 };
+postgresql.c:		else if (0 == strcasecmp (c->key, "Interval"))
+postgresql.c:			cf_util_get_cdtime (c, &db->interval);
+postgresql.c:		else if (strcasecmp ("CommitInterval", c->key) == 0)
+postgresql.c:			cf_util_get_cdtime (c, &db->commit_interval);
+postgresql.c:		CDTIME_T_TO_TIMESPEC (db->interval, &cb_interval);
+postgresql.c:				/* interval = */ (db->interval > 0) ? &cb_interval : NULL,
+postgresql.c:	else if (db->commit_interval > 0) {
+postgresql.c:				"this database connection. Setting 'CommitInterval' does "
+Binary file memory_la-memory.o matches
+Binary file irq.o matches
+Binary file md.o matches
+collectdctl.pod:=item B<putval> I<E<lt>identifierE<gt>> [B<interval=>I<E<lt>secondsE<gt>>]
+collectdctl.pod:to the daemon which will then dispatch them to the write plugins. B<interval>
+collectdctl.pod:specifies the interval (in seconds) used to collect the values following that
+perl.c:static XS (Collectd_plugin_get_interval);
+perl.c:	{ "Collectd::plugin_get_interval",        Collectd_plugin_get_interval },
+perl.c:	if (NULL != (tmp = hv_fetch (hash, "interval", 8, 0)))
+perl.c:		vl->interval = DOUBLE_TO_CDTIME_T (t);
+perl.c:		double t = CDTIME_T_TO_DOUBLE (vl->interval);
+perl.c:		if (NULL == hv_store (hash, "interval", 8, newSVnv (t), 0))
+perl.c: * Collectd::plugin_get_interval ().
+perl.c:static XS (Collectd_plugin_get_interval)
+perl.c:		log_err ("Usage: Collectd::plugin_get_interval()");
+perl.c:	XSRETURN_NV ((NV) CDTIME_T_TO_DOUBLE (plugin_get_interval ()));
+perl.c:} /* static XS (Collectd_plugin_get_interval) */
+perl.c:static int g_interval_get (pTHX_ SV *var, MAGIC *mg)
+perl.c:	log_warn ("Accessing $interval_g is deprecated (and might not "
+perl.c:			"give the desired results) - plugin_get_interval() should "
+perl.c:	sv_setnv (var, CDTIME_T_TO_DOUBLE (interval_g));
+perl.c:} /* static int g_interval_get (pTHX_ SV *, MAGIC *) */
+perl.c:static int g_interval_set (pTHX_ SV *var, MAGIC *mg)
+perl.c:	log_warn ("Accessing $interval_g is deprecated (and might not "
+perl.c:			"give the desired results) - plugin_get_interval() should "
+perl.c:	interval_g = DOUBLE_TO_CDTIME_T (nv);
+perl.c:} /* static int g_interval_set (pTHX_ SV *, MAGIC *) */
+perl.c:static MGVTBL g_interval_vtbl = {
+perl.c:	g_interval_get, g_interval_set, NULL, NULL, NULL, NULL, NULL
+perl.c:	tmp = get_sv ("Collectd::interval_g", /* create = */ 1);
+perl.c:			/* vtbl = */ &g_interval_vtbl,
+Binary file processes.o matches
+ping.c:static double ping_interval = 1.0;
+ping.c:  "Interval",
+ping.c:  /* Assure that `(begin + interval) > end'.
+ping.c:    temp_nsec = modf (ping_interval, &temp_sec);
+ping.c:  if (ping_timeout > ping_interval)
+ping.c:    ping_timeout = 0.9 * ping_interval;
+ping.c:    WARNING ("ping plugin: Timeout is greater than interval. "
+ping.c:  else if (strcasecmp (key, "Interval") == 0)
+ping.c:      ping_interval = tmp;
+ping.c:      WARNING ("ping plugin: Ignoring invalid interval %g (%s)",
+Binary file utils_format_json.o matches
+collectd-threshold.5:once each \fBInterval\fR on the server.
+collectd-threshold.5:missing value is generated once every \fBInterval\fR seconds. If set to \fBfalse\fR
+collectd-threshold.5:dispatch any notification or, in other words, the number of \fBInterval\fRs
+collectd-threshold.5:internal cache. When this happens depends on the \fIinterval\fR of the value list
+collectd-threshold.5:and the global \fBTimeout\fR setting. See the \fBInterval\fR and \fBTimeout\fR settings
+python.c:static char reg_read_doc[] = "register_read(callback[, interval][, data][, name]) -> identifier\n"
+python.c:		"in a fixed interval to signal that it's time to dispatch new values.\n"
+python.c:		"'interval' is the number of seconds between between calls to the callback\n"
+python.c:		v->interval = CDTIME_T_TO_DOUBLE(value_list->interval);
+python.c:	double interval = 0;
+python.c:	static char *kwlist[] = {"callback", "interval", "data", "name", NULL};
+python.c:	if (PyArg_ParseTupleAndKeywords(args, kwds, "O|dOet", kwlist, &callback, &interval, &data, NULL, &name) == 0) return NULL;
+python.c:	ts.tv_sec = interval;
+python.c:	ts.tv_nsec = (interval - ts.tv_sec) * 1000000000;
+mysql.c:					      /* interval = */ NULL, &ud);
+write_riemann.c:	ttl = CDTIME_T_TO_DOUBLE (vl->interval) * host->ttl_factor;
+memcached.c:      /* interval  = */ NULL,
+Binary file write_tsdb.o matches
+dbi.c:          /* interval = */ NULL,
+dbi.c:      column_names, column_num, /* interval = */ 0);
+write_http.c:                        "PUTVAL %s interval=%.3f %s\r\n",
+write_http.c:                        CDTIME_T_TO_DOUBLE (vl->interval),
+write_http.c:                cb->low_speed_time = CDTIME_T_TO_TIME_T(plugin_get_interval());
+Binary file users_la-users.o matches
+network.c:	cdtime_t resolve_interval;
+network.c:		else if (pkg_type == TYPE_INTERVAL)
+network.c:				vl.interval = TIME_T_TO_CDTIME_T (tmp);
+network.c:		else if (pkg_type == TYPE_INTERVAL_HR)
+network.c:				vl.interval = (cdtime_t) tmp;
+network.c:		se->data.client.resolve_interval = 0;
+network.c:	if (client->resolve_interval != 0 && client->next_resolve_reconnect < now) {
+network.c:		DEBUG("network plugin: Reconnecting socket, resolve_interval = %lf, next_resolve_reconnect = %lf",
+network.c:			CDTIME_T_TO_DOUBLE(client->resolve_interval), CDTIME_T_TO_DOUBLE(client->next_resolve_reconnect));
+network.c:	if (client->resolve_interval > 0)
+network.c:		client->next_resolve_reconnect = now + client->resolve_interval;
+network.c:	if (vl_def->interval != vl->interval)
+network.c:		if (write_part_number (&buffer, &buffer_size, TYPE_INTERVAL_HR,
+network.c:					(uint64_t) vl->interval))
+network.c:		vl_def->interval = vl->interval;
+network.c:		else if (strcasecmp ("ResolveInterval", child->key) == 0)
+network.c:			cf_util_get_cdtime(child, &se->data.client.resolve_interval);
+onewire.c:static cdtime_t ow_interval = 0;
+onewire.c:  "Interval"
+onewire.c:  else if (strcasecmp ("Interval", key) == 0)
+onewire.c:      ow_interval = DOUBLE_TO_CDTIME_T (tmp);
+onewire.c:      ERROR ("onewire plugin: Invalid `Interval' setting: %s", value);
+onewire.c:  struct timespec cb_interval;
+onewire.c:  CDTIME_T_TO_TIMESPEC (ow_interval, &cb_interval);
+onewire.c:      (ow_interval != 0) ? &cb_interval : NULL,
+Binary file aggregation.o matches
+collectd.conf.in:# Interval at which to query values. This may be overwritten on a per-plugin #
+collectd.conf.in:# base by using the 'Interval' option of the LoadPlugin block:               #
+collectd.conf.in:#       Interval 60                                                          #
+collectd.conf.in:#Interval     10
+collectd.conf.in:#MaxReadInterval 86400
+collectd.conf.in:#		Interval 60
+collectd.conf.in:#		Interval      30
+collectd.conf.in:#			Interval 30
+collectd.conf.in:#			Interval 30
+collectd.conf.in:#			Interval 30
+collectd.conf.in:#			Interval 30
+collectd.conf.in:#			Interval 30
+collectd.conf.in:#		ResolveInterval 14400
+collectd.conf.in:#	Interval 1.0
+collectd.conf.in:#		Interval 60
+collectd.conf.in:#		CommitInterval 30
+collectd.conf.in:#    MinimumInterval 10
+collectd.conf.in:#       Interval 120
+collectd.conf.in:#       Interval 300
+collectd.conf.in:#    Interval 60
+collectd.conf.in:#       Interval 600
+collectd.conf.in:#	RefreshInterval 60
+Binary file madwifi.o matches
+openldap.c:				/* interval  = */ NULL,
+Binary file mbmon.o matches
+cpython.h:	double interval;
+collectd-perl.5:per interval (see the \fBInterval\fR configuration option of collectd). Usually
+collectd-perl.5:\&    interval => plugin_get_interval (),
+collectd-perl.5:.IP "\fBplugin_get_interval\fR ()" 4
+collectd-perl.5:.IX Item "plugin_get_interval ()"
+collectd-perl.5:Returns the interval of the current plugin as a floating point number in
+collectd-perl.5:seconds. This value depends on the interval configured within the
+collectd-perl.5:\&\f(CW\*(C`LoadPlugin perl\*(C'\fR block or the global interval (see \fIcollectd.conf\fR\|(5) for
+collectd-perl.5:.ie n .IP "\fB\fB$interval_g\fB\fR" 4
+collectd-perl.5:.el .IP "\fB\f(CB$interval_g\fB\fR" 4
+collectd-perl.5:.IX Item "$interval_g"
+collectd-perl.5:This variable keeps the interval in seconds in which the read functions are
+collectd-perl.5:queried (see the \fBInterval\fR configuration option).
+collectd-perl.5:\&\f(CW\*(C`plugin_get_interval()\*(C'\fR (see above). This function takes any plugin-specific
+collectd-perl.5:interval settings into account (see the \f(CW\*(C`Interval\*(C'\fR option of \f(CW\*(C`LoadPlugin\*(C'\fR in
+collectd-perl.5:.ie n .IP "\fB\fB$interval_g\fB\fR" 4
+collectd-perl.5:.el .IP "\fB\f(CB$interval_g\fB\fR" 4
+collectd-perl.5:.IX Item "$interval_g"
+Binary file drbd.o matches
+Binary file target_replace.o matches
+Binary file entropy.o matches
+Binary file ethstat.o matches
+iostat.py:    def __init__(self, path='/usr/bin/iostat', interval=2, count=2, disks=[]):
+iostat.py:        self.interval = interval
+iostat.py:            self.interval,
+iostat.py:        self.iostat_interval = 2
+iostat.py:            elif node.key == 'Interval':
+iostat.py:                self.iostat_interval = int(float(val))
+iostat.py:            'Configured with iostat=%s, interval=%s, count=%s, disks=%s, '
+iostat.py:                self.iostat_interval,
+iostat.py:            interval=self.iostat_interval,
+utils_db_query.c:  cdtime_t interval;
+utils_db_query.c:  if (q_area->interval > 0)
+utils_db_query.c:    vl.interval = q_area->interval;
+utils_db_query.c:  prep_area->interval = 0;
+utils_db_query.c:    char **column_names, size_t column_num, cdtime_t interval)
+utils_db_query.c:  prep_area->interval = interval;
+ntpd.c:	int8_t hpoll;            /* host polling interval */
+ntpd.c:	int8_t ppoll;            /* peer polling interval */
+ntpd.c:	uint32_t poll;           /* system poll interval */
+Binary file .libs/madwifi.so matches
+Binary file .libs/md.so matches
+Binary file .libs/zookeeper.so matches
+Binary file .libs/write_sensu.a matches
+Binary file .libs/fscache.so matches
+Binary file .libs/match_timediff.o matches
+Binary file .libs/ntpd.so matches
+Binary file .libs/email.o matches
+Binary file .libs/tail_csv.a matches
+Binary file .libs/vserver.so matches
+Binary file .libs/csv.a matches
+Binary file .libs/match_empty_counter.so matches
+Binary file .libs/olsrd.a matches
+Binary file .libs/numa.a matches
+Binary file .libs/write_tsdb.a matches
+Binary file .libs/ted.so matches
+Binary file .libs/vmem.a matches
+Binary file .libs/ted.o matches
+Binary file .libs/ipvs.so matches
+Binary file .libs/tcpconns.so matches
+Binary file .libs/memcached.a matches
+Binary file .libs/madwifi.a matches
+Binary file .libs/utils_vl_lookup.o matches
+Binary file .libs/fhcount.o matches
+Binary file .libs/ethstat.so matches
+Binary file .libs/battery.o matches
+Binary file .libs/serial.so matches
+Binary file .libs/network.so matches
+Binary file .libs/turbostat.a matches
+Binary file .libs/protocols.o matches
+Binary file .libs/network_la-network.o matches
+Binary file .libs/interface_la-interface.o matches
+Binary file .libs/target_set.so matches
+Binary file .libs/unixsock.so matches
+Binary file .libs/tail.a matches
+Binary file .libs/target_v5upgrade.o matches
+Binary file .libs/turbostat.o matches
+Binary file .libs/multimeter.so matches
+Binary file .libs/conntrack.so matches
+Binary file .libs/write_graphite.so matches
+Binary file .libs/olsrd.o matches
+Binary file .libs/ipc_la-ipc.o matches
+Binary file .libs/apcups.a matches
+Binary file .libs/nfs.o matches
+Binary file .libs/apcups.o matches
+Binary file .libs/statsd.so matches
+Binary file .libs/match_hashed.so matches
+Binary file .libs/threshold.so matches
+Binary file .libs/openvpn.so matches
+Binary file .libs/target_notification.a matches
+Binary file .libs/conntrack.o matches
+Binary file .libs/target_scale.o matches
+Binary file .libs/zfs_arc.so matches
+Binary file .libs/users.a matches
+Binary file .libs/hddtemp.a matches
+Binary file .libs/md.a matches
+Binary file .libs/ipc.so matches
+Binary file .libs/powerdns.a matches
+Binary file .libs/tcpconns.o matches
+Binary file .libs/df.o matches
+Binary file .libs/hddtemp.so matches
+Binary file .libs/fscache.a matches
+Binary file .libs/wireless.a matches
+Binary file .libs/disk.a matches
+Binary file .libs/fscache.o matches
+Binary file .libs/csv.so matches
+Binary file .libs/ethstat.a matches
+Binary file .libs/ipvs.a matches
+Binary file .libs/write_graphite.o matches
+Binary file .libs/statsd.o matches
+Binary file .libs/match_empty_counter.o matches
+Binary file .libs/utils_cmd_getthreshold.o matches
+Binary file .libs/utils_cmd_putval.o matches
+Binary file .libs/serial.o matches
+Binary file .libs/protocols.a matches
+Binary file .libs/zookeeper.a matches
+Binary file .libs/olsrd.so matches
+Binary file .libs/wireless.o matches
+Binary file .libs/tail_csv.o matches
+Binary file .libs/target_scale.so matches
+Binary file .libs/statsd.a matches
+Binary file .libs/teamspeak2.o matches
+Binary file .libs/match_value.o matches
+Binary file .libs/apcups.so matches
+Binary file .libs/thermal.o matches
+Binary file .libs/match_timediff.so matches
+Binary file .libs/swap.a matches
+Binary file .libs/target_notification.so matches
+Binary file .libs/write_log.o matches
+Binary file .libs/turbostat.so matches
+Binary file .libs/powerdns.o matches
+Binary file .libs/match_regex.a matches
+Binary file .libs/email.a matches
+Binary file .libs/battery.so matches
+Binary file .libs/cpu.a matches
+Binary file .libs/openvpn_la-openvpn.o matches
+Binary file .libs/target_notification.o matches
+Binary file .libs/interface.a matches
+Binary file .libs/nfs.a matches
+Binary file .libs/write_log.a matches
+Binary file .libs/vmem.so matches
+Binary file .libs/memory.a matches
+Binary file .libs/match_value.so matches
+Binary file .libs/contextswitch.o matches
+Binary file .libs/ntpd.a matches
+Binary file .libs/cgroups.o matches
+Binary file .libs/df.so matches
+Binary file .libs/cpufreq.so matches
+Binary file .libs/zookeeper.o matches
+Binary file .libs/utils_format_graphite.o matches
+Binary file .libs/filecount.so matches
+Binary file .libs/uptime_la-uptime.o matches
+Binary file .libs/unixsock.a matches
+Binary file .libs/load.a matches
+Binary file .libs/table.so matches
+Binary file .libs/processes.a matches
+Binary file .libs/cgroups.a matches
+Binary file .libs/target_replace.so matches
+Binary file .libs/tail.o matches
+Binary file .libs/wireless.so matches
+Binary file .libs/write_log.so matches
+Binary file .libs/match_regex.o matches
+Binary file .libs/email.so matches
+Binary file .libs/table.o matches
+Binary file .libs/target_set.o matches
+Binary file .libs/uptime.so matches
+Binary file .libs/processes.so matches
+Binary file .libs/match_regex.so matches
+Binary file .libs/target_replace.a matches
+Binary file .libs/swap_la-swap.o matches
+Binary file .libs/memcached.so matches
+Binary file .libs/target_set.a matches
+Binary file .libs/conntrack.a matches
+Binary file .libs/table.a matches
+Binary file .libs/contextswitch.so matches
+Binary file .libs/disk_la-disk.o matches
+Binary file .libs/ipvs_la-ipvs.o matches
+Binary file .libs/df.a matches
+Binary file .libs/entropy.a matches
+Binary file .libs/battery.a matches
+Binary file .libs/match_timediff.a matches
+Binary file .libs/mbmon.so matches
+Binary file .libs/csv.o matches
+Binary file .libs/irq.a matches
+Binary file .libs/liblookup.a matches
+Binary file .libs/write_sensu.o matches
+Binary file .libs/ipc.a matches
+Binary file .libs/fhcount.a matches
+Binary file .libs/filecount.o matches
+Binary file .libs/uptime.a matches
+Binary file .libs/vmem.o matches
+Binary file .libs/swap.so matches
+Binary file .libs/hddtemp.o matches
+Binary file .libs/load_la-load.o matches
+Binary file .libs/zfs_arc_la-zfs_arc.o matches
+Binary file .libs/exec.o matches
+Binary file .libs/match_value.a matches
+Binary file .libs/tcpconns.a matches
+Binary file .libs/exec.a matches
+Binary file .libs/memory_la-memory.o matches
+Binary file .libs/irq.o matches
+Binary file .libs/tail_csv.so matches
+Binary file .libs/md.o matches
+Binary file .libs/processes.o matches
+Binary file .libs/irq.so matches
+Binary file .libs/utils_format_json.o matches
+Binary file .libs/mbmon.a matches
+Binary file .libs/aggregation.so matches
+Binary file .libs/ted.a matches
+Binary file .libs/disk.so matches
+Binary file .libs/powerdns.so matches
+Binary file .libs/contextswitch.a matches
+Binary file .libs/multimeter.a matches
+Binary file .libs/serial.a matches
+Binary file .libs/cpu.so matches
+Binary file .libs/drbd.a matches
+Binary file .libs/memory.so matches
+Binary file .libs/tail.so matches
+Binary file .libs/write_tsdb.o matches
+Binary file .libs/teamspeak2.a matches
+Binary file .libs/target_scale.a matches
+Binary file .libs/write_graphite.a matches
+Binary file .libs/users_la-users.o matches
+Binary file .libs/protocols.so matches
+Binary file .libs/network.a matches
+Binary file .libs/zfs_arc.a matches
+Binary file .libs/aggregation.a matches
+Binary file .libs/thermal.a matches
+Binary file .libs/aggregation.o matches
+Binary file .libs/drbd.so matches
+Binary file .libs/target_v5upgrade.a matches
+Binary file .libs/madwifi.o matches
+Binary file .libs/mbmon.o matches
+Binary file .libs/drbd.o matches
+Binary file .libs/target_replace.o matches
+Binary file .libs/thermal.so matches
+Binary file .libs/cpufreq.a matches
+Binary file .libs/write_tsdb.so matches
+Binary file .libs/teamspeak2.so matches
+Binary file .libs/collectd-tg matches
+Binary file .libs/entropy.o matches
+Binary file .libs/ethstat.o matches
+Binary file .libs/exec.so matches
+Binary file .libs/memcached.o matches
+Binary file .libs/cpufreq.o matches
+Binary file .libs/match_empty_counter.a matches
+Binary file .libs/nfs.so matches
+Binary file .libs/numa.so matches
+Binary file .libs/threshold.o matches
+Binary file .libs/users.so matches
+Binary file .libs/write_sensu.so matches
+Binary file .libs/cpu_la-cpu.o matches
+Binary file .libs/vserver.a matches
+Binary file .libs/libmount.a matches
+Binary file .libs/vserver.o matches
+Binary file .libs/target_v5upgrade.so matches
+Binary file .libs/ntpd.o matches
+Binary file .libs/match_hashed.o matches
+Binary file .libs/match_hashed.a matches
+Binary file .libs/collectdctl matches
+Binary file .libs/interface.so matches
+Binary file .libs/threshold.a matches
+Binary file .libs/multimeter.o matches
+Binary file .libs/load.so matches
+Binary file .libs/filecount.a matches
+Binary file .libs/fhcount.so matches
+Binary file .libs/openvpn.a matches
+Binary file .libs/numa.o matches
+Binary file .libs/cgroups.so matches
+Binary file .libs/entropy.so matches
+Binary file memcached.o matches
+Binary file cpufreq.o matches
+tail.c: *      Interval 60
+tail.c:  cdtime_t interval;
+tail.c:cdtime_t tail_match_list_intervals[255];
+tail.c:    const char *plugin_instance, oconfig_item_t *ci, cdtime_t interval)
+tail.c:	cm.flags, "tail", plugin_instance, cm.type, cm.type_instance, interval);
+tail.c:  cdtime_t interval = 0;
+tail.c:    else if (strcasecmp ("Interval", option->key) == 0)
+tail.c:      cf_util_get_cdtime (option, &interval);
+tail.c:      status = ctail_config_add_match (tm, plugin_instance, option, interval);
+tail.c:    tail_match_list_intervals[tail_match_list_num] = interval;
+tail.c:  struct timespec cb_interval;
+tail.c:    CDTIME_T_TO_TIMESPEC (tail_match_list_intervals[i], &cb_interval);
+tail.c:    plugin_register_complex_read (NULL, str, ctail_read, &cb_interval, &ud);
+collectd-python.5:per interval (see the \fBInterval\fR configuration option of collectd). Usually
+collectd-python.5:.IP "\fBdispatch\fR([type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) \-> None." 4
+collectd-python.5:.IX Item "dispatch([type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) -> None."
+collectd-python.5:.IP "\fBwrite\fR([destination][, type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) \-> None." 4
+collectd-python.5:.IX Item "write([destination][, type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) -> None."
+collectd-python.5:.IP "interval" 4
+collectd-python.5:.IX Item "interval"
+collectd-python.5:The interval is the timespan in seconds between two submits for the same data
+collectd-python.5:If you submit values more often than the specified interval, the average will
+collectd-python.5:similar to Values but has a severity and a message instead of interval
+collectd-python.5:.IP "\fBdispatch\fR([type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) \-> None.  Dispatch a value list." 4
+collectd-python.5:.IX Item "dispatch([type][, values][, plugin_instance][, type_instance][, plugin][, host][, time][, interval]) -> None. Dispatch a value list."
+collectd-python.5:.IP "register_read(callback[, interval][, data][, name]) \-> \fIidentifier\fR" 4
+collectd-python.5:.IX Item "register_read(callback[, interval][, data][, name]) -> identifier"
+collectd-python.5:This function takes an additional parameter: \fIinterval\fR. It specifies the
+collectd-python.5:an increasing interval.
+Binary file threshold.o matches
+collectd-exec.5:\&\fIInterval\fR seconds. It is perfectly legal for the executable to run for a long
+collectd-exec.5:executed every \fIInterval\fR seconds. If \fIInterval\fR is short (the default is 10
+collectd-exec.5:.IP "\fBinterval=\fR\fIseconds\fR" 4
+collectd-exec.5:.IX Item "interval=seconds"
+collectd-exec.5:Gives the interval in which the data identified by \fIIdentifier\fR is being
+collectd-exec.5:\&  PUTVAL alice/interface/if_octets\-eth0 interval=10 1180647081:421465:479194
+collectd-exec.5:.IP "\s-1COLLECTD_INTERVAL\s0" 4
+collectd-exec.5:.IX Item "COLLECTD_INTERVAL"
+collectd-exec.5:Value of the global interval setting.
+Binary file cpu_la-cpu.o matches
+Binary file vserver.o matches
+Binary file ntpd.o matches
+Binary file match_hashed.o matches
+pyvalues.c:static char interval_doc[] = "The interval is the timespan in seconds between two submits for\n"
+pyvalues.c:		"If you submit values more often than the specified interval, the average\n"
+pyvalues.c:		"[, plugin][, host][, time][, interval]) -> None.  Dispatch a value list.\n"
+pyvalues.c:		"[, plugin][, host][, time][, interval]) -> None.  Dispatch a value list.\n"
+pyvalues.c:	self->interval = 0;
+pyvalues.c:	double interval = 0, time = 0;
+pyvalues.c:			"plugin", "host", "time", "interval", "meta", NULL};
+pyvalues.c:			NULL, &plugin, NULL, &host, &time, &interval, &meta))
+pyvalues.c:	self->interval = interval;
+pyvalues.c:	double time = self->data.time, interval = self->interval;
+pyvalues.c:			"plugin", "host", "time", "interval", "meta", NULL};
+pyvalues.c:			NULL, &plugin, NULL, &host, &time, &interval, &meta))
+pyvalues.c:	value_list.interval = DOUBLE_TO_CDTIME_T(interval);
+pyvalues.c:	double time = self->data.time, interval = self->interval;
+pyvalues.c:			"plugin", "host", "time", "interval", "meta", NULL};
+pyvalues.c:			NULL, &plugin, NULL, &host, &time, &interval, &meta))
+pyvalues.c:	value_list.interval = DOUBLE_TO_CDTIME_T(interval);
+pyvalues.c:	static PyObject *l_interval = NULL, *l_values = NULL, *l_meta = NULL, *l_closing = NULL;
+pyvalues.c:	if (l_interval == NULL)
+pyvalues.c:		l_interval = cpy_string_to_unicode_or_bytes(",interval=");
+pyvalues.c:	if (l_interval == NULL || l_values == NULL || l_meta == NULL || l_closing == NULL)
+pyvalues.c:	if (self->interval != 0) {
+pyvalues.c:		CPY_STRCAT(&ret, l_interval);
+pyvalues.c:		tmp = PyFloat_FromDouble(self->interval);
+pyvalues.c:	{"interval", T_DOUBLE, offsetof(Values, interval), 0, interval_doc},
+pyvalues.c:		"similar to Values but has a severity and a message instead of interval\n"
+Binary file multimeter.o matches
+collectd-tg.pod:collectd-tg B<-n> I<num_vl> B<-H> I<num_hosts> B<-p> I<num_plugins> B<-i> I<interval> B<-d> I<dest> B<-D> I<dport>
+collectd-tg.pod:=item B<-i> I<interval>
+collectd-tg.pod:Sets the interval in which each I<value list> is dispatched. Defaults to 10.0
+network.h:#define TYPE_INTERVAL        0x0007
+network.h:#define TYPE_INTERVAL_HR     0x0009
+snmp.c:  cdtime_t interval;
+snmp.c:  struct timespec cb_interval;
+snmp.c:  hd->interval = 0;
+snmp.c:    else if (strcasecmp ("Interval", option->key) == 0)
+snmp.c:      cf_util_get_cdtime (option, &hd->interval);
+snmp.c:  CDTIME_T_TO_TIMESPEC (hd->interval, &cb_interval);
+snmp.c:      csnmp_read_host, /* interval = */ &cb_interval,
+snmp.c:  vl.interval = host->interval;
+snmp.c:  vl.interval = host->interval;
+snmp.c:  if (host->interval == 0)
+snmp.c:    host->interval = plugin_get_interval ();
+snmp.c:  if ((time_end - time_start) > host->interval)
+snmp.c:        CDTIME_T_TO_DOUBLE (host->interval),
+Binary file numa.o matches
