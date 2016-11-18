@@ -1,0 +1,181 @@
+    - include: pkg_install.yaml pkg_name="coreutils"
+    - include: pkg_install.yaml pkg_name="dmidecode"
+    - include: pkg_install.yaml pkg_name="dpkg-repack"
+    - include: pkg_install.yaml pkg_name="hdparm"
+    - include: pkg_install.yaml pkg_name="iputils-arping"
+    - include: pkg_install.yaml pkg_name="irqbalance"
+    - include: pkg_install.yaml pkg_name="libc6"
+    - include: pkg_install.yaml pkg_name="libgcc1"
+    - include: pkg_install.yaml pkg_name="libstdc++6"
+    - include: pkg_install.yaml pkg_name="lsb-base"
+    - include: pkg_install.yaml pkg_name="nfs-common"
+    - include: pkg_install.yaml pkg_name="perl"
+    - include: pkg_install.yaml pkg_name="procps"
+    - include: pkg_install.yaml pkg_name="sdparm"
+    - include: pkg_install.yaml pkg_name="sed"
+    - include: pkg_install.yaml pkg_name="syslinux"
+    - include: pkg_install.yaml pkg_name="sysvinit-utils"
+    - include: pkg_install.yaml pkg_name="unzip"
+    - include: pkg_install.yaml pkg_name="zip"
+    - include: pkg_install.yaml pkg_name="dpkg-dev"
+    - include: pkg_install.yaml pkg_name="apache2"
+    - include: pkg_install.yaml pkg_name="gawk"
+    - include: pkg_update.yaml
+
+    - name: Check if all the nodes are reachable
+      ping:
+
+    - name: setting proxt client files
+      copy: src=./files/apt.conf dest=/etc/apt/apt.conf
+
+    - name: setting proxt client files
+      copy: src=./files/apt.conf dest=/etc/apt/apt.conf.d/apt.conf
+
+    - name: Update sources.list
+      copy: src=./files/sources.list dest=/etc/apt/sources.list
+
+    - name: Update DNS Server Details
+      copy: src=./files/resolv.conf dest=/etc/resolv.conf
+
+    - name: Update DNS Server Details
+      shell: rm /etc/resolv.conf
+
+    - name: Update DNS Server Details
+      shell: ln -s /run/resolvconf/resolv.conf /etc/resolv.conf
+
+    - include: pkg_update.yaml
+    - include: pkg_install.yaml pkg_name="ntp"
+
+    - name: Setup NTP daemon config file
+      copy: src=./files/ntp_client.conf dest=/etc/ntp.conf
+
+    - name: Update cluster node hostnames
+      copy: src=./files/hosts dest=/etc/hosts
+
+    - name: Procerros validation
+      shell: uname -m
+      register: uname
+
+    - name: Processor check
+      fail: msg="Mapr installation is not supported on this processor"
+      when: " 'x86_64' not  in  uname.stdout"
+
+    - name: OS name
+      shell: lsb_release -si
+      register: os_name
+
+    - name: OS version
+      shell: lsb_release -sr
+      register: os_version
+
+    - name: OS check
+      fail: msg="Mapr installation is not supported on this OS"
+      when: " 'Ubuntu' not  in os_name.stdout"
+
+    - name: OS check
+      fail: msg="Mapr installation is not supported on this OS version"
+      when: os_version.stdout < "12.04"
+
+    - name: Memory test
+      shell: free -g| grep Mem | awk '{print $2}'
+      register: memory
+
+    - name : Dump acl output on console
+      debug: var=memory
+
+    - name: Memory checking
+      fail: msg="Mapr installation is not supported on this RAM"
+      when: memory.stdout < "8"
+
+    - name: Dhcp configuration
+      lineinfile: dest=/etc/dhcp/dhclient.conf
+          insertbefore='^#retry 60'
+          line="timeout 30;"
+
+    - name: Get interface list
+      shell: ifconfig -a | sed 's/[ \t].*//;/^\(lo\|\)$/d'
+      register: data
+
+    - name: Interfaces up
+      shell: ifconfig {{ item }} up
+      with_items: data.stdout_lines
+
+    - name: Searching for DHCP ip
+      shell: dhclient {{ item }}
+      with_items: data.stdout_lines
+
+
+#--------------------------
+    - include: pkg_install.yaml pkg_name="lldpd"
+
+    - name: Setup failsafe timer ( for quick bootup )
+      copy: src=./files/failsafe.conf dest=/etc/init/failsafe.conf
+
+    - name: Update sources.list
+      copy: src=./files/sources.list dest=/etc/apt/sources.list
+
+    - name: Update DNS Server Details
+      copy: src=./files/resolv.conf dest=/etc/resolvconf/resolv.conf.d/base
+
+    - name: mapr key
+      shell: wget -O - http://package.mapr.com/releases/pub/maprgpg.key | sudo apt-key add -
+
+    - include: pkg_update.yaml
+    - include: pkg_install.yaml pkg_name="openjdk-7-jdk"
+    - include: pkg_install.yaml pkg_name="openjdk-7-jre"
+
+    - name: Fix to correct dpkg itself
+      shell: dpkg --configure -a
+
+    - include: pkg_install.yaml pkg_name="libssl-dev"
+
+    - include: pkg_install.yaml pkg_name="rsyslog-gnutls"
+
+    - name: Ensure rsyslog service is running
+      service: name=rsyslog state=running
+
+    - name: Add mapr group
+      shell: groupadd -g 5000 mapr
+
+    - name: Add mapr user
+      shell: useradd -g 5000 -u 5000 -m -s /bin/bash mapr
+
+    - name: Creating mapr user password
+      user: name=mapr password=$6$rounds=40000$ESoUcReB7ntJ/Fmv$SBWwa5.pRHhP8ZYu4isGSrYJkCHtuYbQyY9Hz4/HWoXclnmwYQLh/02BPig8eEjYNUDmpJu31j0zL.f.IgHd7/
+
+    - name: Creating root user password
+      user: name=root password=$6$rounds=40000$RaQSqbvQdX5rPD/h$4Q3BAgGNwug9Uao5DRO.7v6a5wwk4ooRHyFtwe9DDXzDEpLtk5sUOMJgUi792Zs7kZHR.b4CZx78U6PBziSKS0
+
+    #Node pre-requisites
+    # Ensure default mask for root user is 0022 - /etc/.profile or /etc/.cshrc or /etc/.login
+    - name: Ensure default mask for root user is 0022
+      command: echo "umask 022" >> /etc/.profile
+
+    - name: MApr .ssh directory craetion.
+      shell: mkdir /home/mapr/.ssh
+
+    - name: MApr .ssh directory craetion.
+      shell: chmod 777 /home/mapr/.ssh
+
+    # MapR does not recommend using overcommit
+    - name: Update file /etc/sysctl.conf
+      shell: echo "vm.overcommit_memory=0" >> /etc/sysctl.conf
+
+    - name: Update configuration
+      shell: sysctl -p
+
+    # Configure TCP retries
+    - name: Update file /etc/sysctl.conf
+      shell: echo "net.ipv4.tcp_retries2=5" >> /etc/sysctl.conf
+
+    - name: Update TCP Retries Configuration
+      shell: sysctl -p
+
+    # MapR recommends disabling the Transparent Huge Pages (THP) feature in the Linux kernel
+    - name: Disabling the Transparent Huge Pages (THP) feature
+      shell: echo "never" > /sys/kernel/mm/transparent_hugepage/defrag
+
+    # Configure ulimit ( ulimit -n ) to 64000
+    - name: configure ulimit
+      shell: ulimit -n 64000
+

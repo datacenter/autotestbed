@@ -1,0 +1,12 @@
+---
+- name: Start {{pkg_name}} service
+  sudo: true
+  shell: service {{pkg_name}} restart
+
+- name: Check {{pkg_name}} status
+  sudo: true
+  shell: service {{pkg_name}} status
+  register: status
+
+- name : Debug {{pkg_name}} status
+  debug: var=status.stdout

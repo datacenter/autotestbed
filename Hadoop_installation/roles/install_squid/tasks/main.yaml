@@ -1,0 +1,24 @@
+    - include: pkg_install.yaml  pkg_name="squid3"
+
+    - name: /etc/squid3/squid.conf Modification
+      lineinfile: dest=/etc/squid3/squid.conf regexp='^http_port ' line='http_port 0.0.0.0:3128'
+
+    - name: /etc/squid3/squid.conf Modification
+      lineinfile: dest=/etc/squid3/squid.conf
+         insertbefore="^acl SSL_ports port 443"
+         regexp='^acl my_network src'
+         line="acl my_network src {{ subnet }}"
+
+    - name: /etc/squid3/squid.conf Modification
+      lineinfile: dest=/etc/squid3/squid.conf
+         insertafter='^http_access allow localhost'
+         line="http_access allow my_network"
+
+    - name: /etc/squid3/squid.conf Modification
+      lineinfile: dest=/etc/squid3/squid.conf
+         insertafter='^# Let operating system decide'
+         line="dns_v4_first on"
+
+    - name: Restart squid3 service
+      shell: service squid3 restart
+

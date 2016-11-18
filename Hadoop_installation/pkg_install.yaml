@@ -1,0 +1,5 @@
+---
+- name: Install {{pkg_name}}
+  sudo: true
+  apt: pkg={{pkg_name}} state=present force=yes
+

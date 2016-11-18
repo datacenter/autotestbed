@@ -1,0 +1,81 @@
+
+
+
+
+              Ansible based Hadoop installation-User Guide
+
+
+ 
+User scripts should be kept in ansible node(Node which has ansible installed).
+Pre-requisite:
+1.	Install ansible on ansible server-node.
+2.	Ssh key from ansible node should be copied to the cluster nodes.
+3.	In ansible server-node, Python version should be 2.7
+
+User inputs before running the script on ansible node:
+1.	“/etc/ansible/hosts” files has to be updated with list of nodes for each service.
+2.	Update the “files/hosts” file with list of  IP addresses and hostnames
+3.	Update the “files/resolv.conf” file with the list of DNS servers
+4.	Update “settings.cfg” file with network and hostname.
+5.	Subnet & cluster name has to be given as an input to prepare_nodes.yaml
+6.	Subnet has to be given as input for Hadoop_install.yaml for mapr installation.
+
+/etc/ansible/hosts file will have the following format:
+[allnodes]  #Should have all node IP addresses
+192.168.0.46
+192.168.0.66
+ [mapr-cldb]
+192.168.0.46
+192.168.0.66
+[mapr-zookeeper]
+192.168.0.46
+ [mapr-nfs]
+192.168.0.46
+[mapr-webserver]
+192.168.0.46
+[mapr-fileserver]
+192.168.0.46
+192.168.0.66
+[mapr-jobtracker]
+192.168.0.46
+ [mapr-resourcemanager]
+192.168.0.46
+[mapr-historyserver]
+192.168.0.46
+[mapr-nodemanager]
+192.168.0.66
+[mapr-tasktracker]
+192.168.0.66
+[squid3]
+192.168.0.46
+[ntp-server]
+192.168.0.46
+User should enter the list of IP’s where each service should run.
+
+Steps to Run the ansible script:
+1.	Following script is used to install the pre-requisites:
+ansible-playbook prepare_node.yaml --extra-vars="subnet=192.168.0.0/16    cluster_name=new1_cluster "
+
+2.	Following script is used to install mapr packages:
+ansible-playbook hadoop_install.yaml --extra-vars="subnet=192.168.0.0/16"
+
+3.	Following script is used to add the license to the cluster
+ansible-playbook add_license.yaml --extra-vars="path=path/to/license.txt    cluster_name=new1_cluster "
+
+Note:
+a.	Cluster_id can be known by logging into Hadoop cluster website with the credentials (mapr / mapr)
+b.	Go to manage licenses & get the cluster_id
+c.	Go to the mapr website: https://www.mapr.com Register & login
+d.	Click on “register a cluster”, give cluster_id, cluster_name & register
+e.	Click on “view key”, Copy the license key into a file Eg: license.txt & place it in ansible node.
+
+
+4.	Following script is used to validate the cluster after license is added
+python validate.py 
+
+5.	Following command is used cleanup/uninstall mapr packages on  all the nodes
+ansible-playbook hadoop_cleanup.yaml
+
+Test Environment: 
+This has been tested on a 2 node setup with Ubuntu as an operating system.
+

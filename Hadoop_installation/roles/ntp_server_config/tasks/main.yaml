@@ -1,0 +1,6 @@
+    - name: Setup NTP daemon config file
+      copy: src=./files/ntp_server.conf dest=/etc/ntp.conf
+
+    - name: Ensure NTP daemon restart and autostart on ntp-server
+      service: name=ntp enabled=yes state=restarted
+

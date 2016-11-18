@@ -1,0 +1,65 @@
+-----BEGIN SIGNED MESSAGE-----
+clusterid: "543151212863817582"
+version: "4.0"
+customerid: "Home"
+issuer: "MapR Technologies"
+licType: Registered
+description: "MapR Community Edition"
+enforcement: HARD
+gracePeriod: 0
+issuedate: 1473761078
+issuedateStr: "Tue Sep 13 10:04:38 UTC 2016"
+capabilities {
+  feature: NFS
+  name: "NFS"
+  permission: ALLOW
+  featureData {
+    maxNfsNodes: "1"
+  }
+}
+capabilities {
+  feature: MAXNODES
+  name: "Max Nodes in Cluster"
+  permission: ALLOW
+  featureData {
+    maxNodes: "unlimited"
+  }
+}
+capabilities {
+  feature: MAPR_TABLES
+  name: "MapR Tables"
+  permission: ALLOW
+}
+capabilities {
+  feature: MAPR_STREAMS
+  name: "MapR Streams"
+  permission: ALLOW
+}
+modules: "None"
+-----BEGIN DATA-----
+ChI1NDMxNTEyMTI4NjM4MTc1ODISAzQuMBoESG9tZSoRTWFwUiBUZWNobm9sb2dpZXMwAjoWTWFw
+UiBDb21tdW5pdHkgRWRpdGlvbkACSABQtp7fvgViHFR1ZSBTZXAgMTMgMTA6MDQ6MzggVVRDIDIw
+MTaiAQ4IARIDTkZTGANSAwoBMaIBJwgKEhRNYXggTm9kZXMgaW4gQ2x1c3RlchgDUgsSCXVubGlt
+aXRlZKIBEQgOEgtNYXBSIFRhYmxlcxgDogESCBcSDE1hcFIgU3RyZWFtcxgDsgEETm9uZQ==
+-----BEGIN SIGNATURE-----
+BHf4oe6OYQ/ZRRzYPPNiyehZW2P0X/ugVXeJa0MCJswxGXOaXzLIbLqd3aGKDQMFTjpmPj7I9QHT
+8676a67pe4k6PsE/iBP4ugtVvre3ZflXxcIZw1dBS7pkpsE21aid0wW4aLmTdYDBa9R05ijKaG0r
+v7UNl3lKLZnHJyIDZCQGytrh1VQtFHEDuR58vaWudGvombMauVe75K4qDPFJ9pqZVpvdfk5Ltmwu
+Jq21HzEQoormxNJ9IMjsDYFndca4aIzK76lrv91A2t4eGI+hPkJ2PxkxHu9jTdqmXG26BKopX4jZ
+Rq1d+1BEteEt0yuw0KxVj5XV8D72ykR0kD7d7NK+lJ41eARlJISTOrS/NdbSd4ji6TWCyF9l+svu
+4YODaOgBIZyOgplB+re5Yzhx3XzV9WQiwCi1FrdW4ydBEkDmHIXVNfQ5tPTsXkaem5c02yvEvByZ
+tqv/e5njO6nT5B604yziJPyFCjVmgPf98yxHuTDIzmS7E8emy4BQX0ztLbvEje0mSopqJ5FJEg4+
+PvQMdzXjUPMOA4ilDx+guCzw9fQ5fMttULANE2vfhQUHgBT4io0rzV2q1pHsbDemRJ5d6kKVLyK6
+AaqA7LYaztJOSQh/BcgkHJWwkzS1FXoMo8RLAamV2+BFFB+cbtN7N7Elj8jg0xtQ33MKYCWhG2aR
+NvpiQSnSl/3XPSY2oes85oKSrH6T7OI/gLBJLlXSccpz6P5uwygWpp5sE7M9dKoMXRREJQtcj7fv
+wX+co523zg9nCBX/qOkVfeCdBIxggjbHIEfCOh8c+OzOL9JAQKPaQhAU3eW0czWaYP+S9apyJQ5V
+Kq1NMhhANeuSv9gGXmG1FjRIN6VCgNhBbKrqN5/xAe1N3zEQvJctAbYPHx5lsKCecuRq9jfrSDW0
+lp+I9N4xg/R6QzCtfWJEnP5VoUxyfLzODv9SN2xsOLHwdZD8ipT6GPtkpinnsQcLdhtRpmc83fN9
+NFEBTF1OG4TEP0ZnxYU0kLw3yKvthJuqeicCG9g73rNDgYXIgJpB4kGyiQvc8DNrFRlRJJJxhfto
+0f8/1csW/PmvAx4a3/U7iGze+xhGfy2ugdB9VGPjsVrYppusHO0ddWjxGpPr8YZ+hqJuXSWH2M0R
+SkDoAN2xg/SkI6W9yCBjQZgRnIAc29UmdRtQSPkKMUdj4b10g1VWk9KDBDzQJYZi7yOo25CmBFDn
+5M157PXIA8Howc/YSM2zkKj+uNldct+acqQtrvFioU1pO8TrsYUwsKCkjLuBzbXvyeMpQki8w6i2
+eY7XCWxQQvmbptwtsRQjy4JvocpdAGjyF+xg/h+IpWBYNO1j9c8G5LSBZmr7Aq1UwBW/R7IAPw==
+-----END SIGNATURE-----
+7oHNgwgtJWtsPVseNqAQBPuhuLE=
+-----END MESSAGE HASH-----

@@ -36,8 +36,8 @@
           - /tmp/*mapr*
           - /tmp/cmd.sh
           - /tmp/ntp.sh
-#    - name: delete mapr user
-#      shell: userdel -f mapr
-#    - name: delete mapr home directory
-#      shell: rm -rf /home/mapr
+    - name: delete mapr user
+      shell: userdel -f mapr
+    - name: delete mapr home directory
+      shell: rm -rf /home/mapr
     

@@ -1,0 +1,12 @@
+    - name: Ensure NTP daemon restart and autostart on all nodes
+      service: name=ntp enabled=yes state=restarted
+
+    - name: Setup NTP daemon config file
+      copy: src=./files/ntp_sync.sh dest=/tmp/ntp_sync.sh
+
+    - name: Change Permission
+      shell: chmod 777 /tmp/ntp_sync.sh
+
+    - name: Sync time with NTP server
+      shell: /tmp/ntp_sync.sh
+

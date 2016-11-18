@@ -1,4 +1,4 @@
 127.0.0.1 localhost
-192.168.0.50  compute001
+10.11.0.53 compute001
 #192.168.0.80  compute002
-192.168.0.66  compute002
+10.11.0.55  compute002

@@ -8,7 +8,8 @@
     <link rel="shortcut icon" href="{{SPLUNKWEB_URL_PREFIX}}/static/appLogo.png" />
         <link rel="stylesheet" type="text/css" href="/en-US/static/@f44afce176d0/css/build/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="/en-US/static/@f44afce176d0/css/build/pages/dashboard-simple-bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/en-US/static/@f44afce176d0/css/build/pages/custom.css" />
+        <link rel="stylesheet" type="text/css" href="/en-US/static/@f44afce176d0/css/build/pages/maplelabs_analytics.css" />
+  
   <style>
  .app-link .app-logo{
     float:right !important;
@@ -40,8 +41,17 @@ float:left;
 #row1 .splunk-view .splunk-table td:nth-of-type(2) {
     display:none
 }
+.table tbody tr td:nth-child(6){
+	background:url('/en-US/splunkd/__raw/servicesNS/admin/MonitoringSolutions/static/delete.png') 44px 5px  no-repeat !important;
+}
     
-
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+   .wid31{width:31.3%}
+}
+ @-moz-document url-prefix() {
+   .wid31{width:31.3%}
+}   
+    
 </style>
 </head>
 <body class="simplexml preload locale-en">
@@ -62,7 +72,7 @@ styles in <div> tags, similar to Bootstrap's grid system.
     <div class="dashboard-header clearfix">
         <h2>Monitoring Jobs</h2>
     </div>
-  <div class="col-lg-12">
+  <div class="col-lg-12" style="margin-right:-10px">
        <div class="wid30 bgWhite pull-left brd">
         <div class="headerBar">Add New Job</div>   
          <form id="formCustomerInfo">
@@ -121,7 +131,7 @@ styles in <div> tags, similar to Bootstrap's grid system.
                     </dd>
                 </dl>
             </div>
-            <div class="submit_Container"><a href="javascript:void(0)" class="blueTxt pull-right font13">View Hadoop Status >></a></div>
+            <div class="submit_Container">&nbsp;</div><!--<a href="javascript:void(0)" class="blueTxt pull-right font13">View Hadoop Status >></a>-->
         </div>
         <div class="wid31 pull-left pad brd">
             <div class="headerBar">Cluster Status</div>
@@ -182,7 +192,7 @@ styles in <div> tags, similar to Bootstrap's grid system.
                     </table>
                 </div>          
             </div> 
-          <div class="noValue" id="hideRunningJobStats" style="display:none; height: 193px; padding: 10px">Currently NO Jobs Running</div>
+          <div class="noValue" id="hideRunningJobStats" style="display:none;  position:relative; margin:20% 0px; padding: 10px">NO Jobs</div>
             <div class="submit_Container">&nbsp; </div>
         </div>
         </div>
@@ -368,12 +378,26 @@ require([
             "latest_time": "$form.&nbsp.latest$",
             "cancelOnUnload": true,
             "earliest_time": "$form.&nbsp.earliest$",
-            "search":"source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx Server_Stats Switch_Stats | dedup JobTagID | rename Job as \"Job Type\" JobTagName as \"Job Name\" Job_Status as \"Job Status\" Time_Seconds as \"Completion Time (s)\" Server_Stats as \"Server Stats\" Switch_Stats as \"Switch Stats\" job_mapsTotal as \"Total Maps\"  job_reducesTotal as \"Total Reduces\" avg_cpu as \" Avg CPU Util\" avg_ram as \"Avg RAM Util\" avg_disk as \"Avg Disk Util\" avg_inf_rx as \"Avg NIC Rx\" avg_inf_tx as \"Avg NIC Tx\"",
+      //      "search":"source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx Server_Stats Switch_Stats Hadoop_Stats | dedup JobTagID |  rename Job as \"Job Type\" JobTagName as \"Job Name\" Job_Status as \"Job Status\" Time_Seconds as \"Completion Time (s)\" Server_Stats as \"Server Stats\" Switch_Stats as \"Switch Stats\"  Hadoop_Stats as \"Hadoop Stats\"  job_mapsTotal as \"Total Maps\"  job_reducesTotal as \"Total Reduces\" avg_cpu as \" Avg CPU Util\" avg_ram as \"Avg RAM Util\" avg_disk as \"Avg Disk Util\" avg_inf_rx as \"Avg NIC Rx\" avg_inf_tx as \"Avg NIC Tx\"",
+      		"search":"source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Job_Delete Time_Seconds job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx Server_Stats Switch_Stats Hadoop_Stats | dedup JobTagID | rename Job as \"Job Type\" JobTagName as \"Job Name\" Job_Status as \"Job Status\" Job_Delete as \"Job Delete\" Time_Seconds as \"Completion Time (s)\" Server_Stats as \"Server Stats\" Switch_Stats as \"Switch Stats\"  Hadoop_Stats as \"Hadoop Stats\"  job_mapsTotal as \"Total Maps\"  job_reducesTotal as \"Total Reduces\" avg_cpu as \" Avg CPU Util\" avg_ram as \"Avg RAM Util\" avg_disk as \"Avg Disk Util\" avg_inf_rx as \"Avg NIC Rx\" avg_inf_tx as \"Avg NIC Tx\"",
             "app": utils.getCurrentApp(),
             "auto_cancel": 90,
             "preview": true,
             "runWhenTimeIsUndefined": false
         }, {tokens: true, tokenNamespace: "submitted"});
+		
+		var searchQuery7 = {
+            "id": "search7",
+            "status_buckets": 0,
+            "latest_time": "$form.&nbsp.latest$",
+            "cancelOnUnload": true,
+            "earliest_time": "$form.&nbsp.earliest$",
+            "search":"source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        };
 
         var search2 = new SearchManager({
             "id": "search2",
@@ -394,7 +418,7 @@ require([
             "latest_time": "$form.&nbsp.latest$",
             "cancelOnUnload": true,
             "earliest_time": "$form.&nbsp.earliest$",
-            "search":"|set intersect [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx | dedup JobTagID| fields JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ] [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx |dedup JobTagID |eval JobTagID =  if(Job_Status == \"Running\", JobTagID,none) | table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx  | fields JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ] | table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ",
+            "search":"|set intersect [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx | dedup JobTagID | fields JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ] [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx |dedup JobTagID |eval JobTagID =  if(Job_Status == \"Running\", JobTagID,none) | table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx  | fields JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ] | table JobTagID Job JobTagName Job_Status Time_Seconds Server_Stats Switch_Stats Hadoop_Stats job_mapsTotal job_reducesTotal avg_cpu avg_ram avg_disk avg_inf_rx avg_inf_tx ",
             "app": utils.getCurrentApp(),
             "auto_cancel": 90,
             "preview": true,
@@ -407,8 +431,9 @@ require([
             "latest_time": "$form.&nbsp.latest$",
             "cancelOnUnload": true,
             "earliest_time": "$form.&nbsp.earliest$",
-            "search":"sourcetype=server_stats plugin=hadoop_static_data [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] | table JobTagName total_cluster_nodes error_nodes Configured_Total_Data_Nodes Configured_Total_RM_Nodes Configured_Total_Yarn_Nodes zoo_keeper_status  | rename total_cluster_nodes as \"Total Nodes\" error_nodes as \"Total Error Nodes\" Configured_Total_Data_Nodes as \"Total Data Nodes\" Configured_Total_RM_Nodes as \"Total RM Nodes\" Configured_Total_Yarn_Nodes as \"Total Yarn Nodes\" zoo_keeper_status as \"Zookeeper Status\" |  sort - _time | head 1 ",
-            "app": utils.getCurrentApp(),
+            "search":"sourcetype=server_stats plugin=hadoop_static_data [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | table JobTagName | sort - _time | head 1 ] | table JobTagName total_cluster_nodes error_nodes Configured_Total_Data_Nodes Configured_Total_RM_Nodes Configured_Total_Yarn_Nodes zoo_keeper_status  | rename total_cluster_nodes as \"Total Nodes\" error_nodes as \"Total Error Nodes\" Configured_Total_Data_Nodes as \"Total Data Nodes\" Configured_Total_RM_Nodes as \"Total RM Nodes\" Configured_Total_Yarn_Nodes as \"Total Yarn Nodes\" zoo_keeper_status as \"Zookeeper Status\" |  sort - _time | head 1 ",
+        //      "search":"sourcetype=server_stats plugin=hadoop_static_data [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | table JobTagName | sort - _time | head 1 ] | table JobTagName total_cluster_nodes error_nodes Configured_Total_Data_Nodes Configured_Total_RM_Nodes Configured_Total_Yarn_Nodes zoo_keeper_status  | rename total_cluster_nodes as \"Total Nodes\" error_nodes as \"Total Error Nodes\" Configured_Total_Data_Nodes as \"Total Data Nodes\" Configured_Total_RM_Nodes as \"Total RM Nodes\" Configured_Total_Yarn_Nodes as \"Total Yarn Nodes\" zoo_keeper_status as \"Zookeeper Status\" |  sort - _time | head 1 ",
+             "app": utils.getCurrentApp(),
             "auto_cancel": 90,
             "preview": true,
             "runWhenTimeIsUndefined": false
@@ -494,7 +519,7 @@ require([
             else{
                 setTimeout(function () { 
                 location.reload();
-                }, 30 * 1000);              
+                }, 45*1000);              
             }
     });
 
@@ -504,7 +529,7 @@ require([
             "latest_time": "$form.&nbsp.latest$",
             "cancelOnUnload": true,
             "earliest_time": "$form.&nbsp.earliest$",
-            "search":"sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName  | sort - _time | head 1 ] type = collectd plugin=cpu | stats latest(cpu_util) as avg_cpu_util by Hostname | stats avg(avg_cpu_util) as avg_cpu_util | eval \"Avg CPU Util (%)\" = round(avg_cpu_util,2)|table \"Avg CPU Util (%)\" | appendcols [ search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin=memory | stats latest(mem_util) as util latest(mem_buffered) as buff latest(mem_cached) as cache latest(mem_free) as free latest(mem_slab_recl) as slab latest(mem_slab_unrecl) as unslab  by Hostname | eval mem_util=(util*100)/(buff+cache+free+slab+unslab+util) | stats avg(mem_util) as mem_util | eval \"Avg RAM Util (%)\" = round(mem_util,2)|table \"Avg RAM Util (%)\"  ] | appendcols [search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin= interface plugin_instance=all-interfaces collectd_type=if_octets | stats values(Rx) as valueRx by Hostname, _time | stats earliest(_time) AS Earliest, earliest(valueRx) as start_Rx , latest(_time) AS Latest, latest(valueRx) as end_Rx by Hostname | eval total = (end_Rx-start_Rx)/(Latest-Earliest) | eval Rx_Rate= (total*8)/1000000 |  stats avg(Rx_Rate) as Rx_Rate by Hostname | eval Rx_Rate = round(Rx_Rate,2)| stats sum(Rx_Rate) as \"Avg NIC Rx (Mbps)\" ] | appendcols [ search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin= interface plugin_instance=all-interfaces collectd_type=if_octets | stats values(Tx) as valueTx by Hostname, _time,JobTagName | stats earliest(_time) AS Earliest, earliest(valueTx) as start_Tx , latest(_time) AS Latest, latest(valueTx) as end_Tx by Hostname,JobTagName  | eval total = (end_Tx-start_Tx)/(Latest-Earliest) | eval Tx_Rate= (total*8)/1000000 |  stats avg(Tx_Rate) as Tx_Rate by Hostname,JobTagName| eval Tx_Rate = round(Tx_Rate,2)| stats sum(Tx_Rate) as \"Avg NIC Tx (Mbps)\" by JobTagName] | appendcols[ search sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1] type=collectd  plugin=readdisk collectd_type=disk_octets | stats values(read) as valueRead by Hostname, _time,JobTagName | stats earliest(_time) AS Earliest, earliest(valueRead) as start_read , latest(_time) AS Latest, latest(valueRead) as end_read by Hostname | eval total = (end_read-start_read)/(Latest-Earliest) | eval disk_read = (total/1000000) | stats avg(disk_read) as disk_read | eval disk_read = round(disk_read,2)| chart values(disk_read)  as \"Avg Disk Read (MBps)\"] | appendcols [  search sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type=collectd  plugin=readdisk collectd_type=disk_octets | stats values(write) as valueWrite by Hostname, _time | stats earliest(_time) AS Earliest, earliest(valueWrite) as start_write , latest(_time) AS Latest, latest(valueWrite) as end_write by Hostname | eval total = (end_write-start_write)/(Latest-Earliest) | eval disk_write = (total/1000000) | stats avg(disk_write) as disk_write | eval disk_write = round(disk_write,2)| chart values(disk_write)  as \"Avg Disk Write (MBps)\"] | table \"Avg CPU Util (%)\",\"Avg RAM Util (%)\",\"Avg NIC Rx (Mbps)\",\"Avg NIC Tx (Mbps)\" ,\"Avg Disk Read (MBps)\",\"Avg Disk Write (MBps)\"",
+            "search":"sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName  | sort - _time | head 1 ] type = collectd plugin=cpu | stats latest(cpu_util) as avg_cpu_util by Hostname | stats avg(avg_cpu_util) as avg_cpu_util | eval \"Avg CPU Util (%)\" = round(avg_cpu_util,2)|table \"Avg CPU Util (%)\" | appendcols [ search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin=memory | stats latest(mem_util) as util latest(mem_buffered) as buff latest(mem_cached) as cache latest(mem_free) as free latest(mem_slab_recl) as slab latest(mem_slab_unrecl) as unslab  by Hostname | eval mem_util=(util*100)/(buff+cache+free+slab+unslab+util) | stats avg(mem_util) as mem_util | eval \"Avg RAM Util (%)\" = round(mem_util,2)|table \"Avg RAM Util (%)\"  ] | appendcols [search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin= interface plugin_instance=all-interfaces collectd_type=if_octets | stats values(Rx) as valueRx by Hostname, _time | stats earliest(_time) AS Earliest, earliest(valueRx) as start_Rx , latest(_time) AS Latest, latest(valueRx) as end_Rx by Hostname | eval total = (end_Rx-start_Rx)/(Latest-Earliest) | eval Rx_Rate= (total*8)/1048576 |  stats avg(Rx_Rate) as Rx_Rate by Hostname | eval Rx_Rate = round(Rx_Rate,2)| stats sum(Rx_Rate) as \"Avg NIC Rx (Mbps)\" ] | appendcols [ search sourcetype=server_stats  [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | table JobTagID JobTagName Job_Status | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type = collectd plugin= interface plugin_instance=all-interfaces collectd_type=if_octets | stats values(Tx) as valueTx by Hostname, _time,JobTagName | stats earliest(_time) AS Earliest, earliest(valueTx) as start_Tx , latest(_time) AS Latest, latest(valueTx) as end_Tx by Hostname,JobTagName  | eval total = (end_Tx-start_Tx)/(Latest-Earliest) | eval Tx_Rate= (total*8)/1048576 |  stats avg(Tx_Rate) as Tx_Rate by Hostname,JobTagName| eval Tx_Rate = round(Tx_Rate,2)| stats sum(Tx_Rate) as \"Avg NIC Tx (Mbps)\" by JobTagName] | appendcols[ search sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1] type=collectd  plugin=readdisk collectd_type=disk_octets | stats values(read) as valueRead by Hostname, _time,JobTagName | stats earliest(_time) AS Earliest, earliest(valueRead) as start_read , latest(_time) AS Latest, latest(valueRead) as end_read by Hostname | eval total = (end_read-start_read)/(Latest-Earliest) | eval disk_read = (total/1048576) | stats avg(disk_read) as disk_read | eval disk_read = round(disk_read,2)| chart values(disk_read)  as \"Avg Disk Read (MBps)\"] | appendcols [  search sourcetype=server_stats [search source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\"| table JobTagID JobTagName Job_Status | dedup JobTagID | eval JobTagName =  if(Job_Status ==\"Running\", JobTagName,none) | table JobTagName | sort - _time | head 1 ] type=collectd  plugin=readdisk collectd_type=disk_octets | stats values(write) as valueWrite by Hostname, _time | stats earliest(_time) AS Earliest, earliest(valueWrite) as start_write , latest(_time) AS Latest, latest(valueWrite) as end_write by Hostname | eval total = (end_write-start_write)/(Latest-Earliest) | eval disk_write = (total/1048576) | stats avg(disk_write) as disk_write | eval disk_write = round(disk_write,2)| chart values(disk_write)  as \"Avg Disk Write (MBps)\"] | table \"Avg CPU Util (%)\",\"Avg RAM Util (%)\",\"Avg NIC Rx (Mbps)\",\"Avg NIC Tx (Mbps)\" ,\"Avg Disk Read (MBps)\",\"Avg Disk Write (MBps)\"",
             "app": utils.getCurrentApp(),
             "auto_cancel": 90,
             "preview": true,
@@ -563,6 +588,10 @@ require([
         // VIEWS: VISUALIZATION ELEMENTS
         //
 
+		
+		var JobTagNameDelete;
+		var JobTagIdDelete;
+		
         var element1 = new TableElement({
             "id": "element1",
             "drilldown": "row",
@@ -575,6 +604,7 @@ require([
         element1.on("click", function(e) {
             if (e.field == "Server Stats") {
                 e.preventDefault();
+console.log('server')
                 var url = TokenUtils.replaceTokenNames("{{SPLUNKWEB_URL_PREFIX}}/app/MonitoringSolutions/server_view?JobTagName=$row.Job\ Name$&earliest=0&latest=", _.extend(submittedTokenModel.toJSON(), e.data), TokenUtils.getEscaper('url'));
                 localStorage.setItem('jobTagName',e.data['row.Job Name']);
                 utils.redirect(url, false, "_self");
@@ -582,15 +612,50 @@ require([
        
         if (e.field == "Switch Stats") {
                 e.preventDefault();
+console.log('switch')
                 var url = TokenUtils.replaceTokenNames("{{SPLUNKWEB_URL_PREFIX}}/app/MonitoringSolutions/switch_view_html?JobTagName=$row.Job\ Name$&earliest=0&latest=", _.extend(submittedTokenModel.toJSON(), e.data), TokenUtils.getEscaper('url'));
                 localStorage.setItem('jobTagName',e.data['row.Job Name']);
                 utils.redirect(url, false, "_self");
             }
         if (e.field == "Hadoop Stats") {
                 e.preventDefault();
+console.log('Hadoop')
                 var url = TokenUtils.replaceTokenNames("{{SPLUNKWEB_URL_PREFIX}}/app/MonitoringSolutions/hadoop_stats_html?JobTagID=$row.JobTagID$&JobTagName=$row.Job\ Name$&earliest=0&latest=", _.extend(submittedTokenModel.toJSON(), e.data), TokenUtils.getEscaper('url'));
                 localStorage.setItem('jobTagName',e.data['row.Job Name']);
                 utils.redirect(url, false, "_self");
+            }
+			
+		if (e.field == "Job Delete") {
+                e.preventDefault();
+				JobTagNameDelete = e.data['row.Job Name'];
+				JobTagIdDelete = e.data['row.JobTagID'];
+				
+				searchQuery7.search = "source=\"/opt/splunk/etc/apps/MonitoringSolutions/bin/newfile.txt\" | search \"JobTagName="+ JobTagNameDelete +"\" \"JobTagID="+ JobTagIdDelete +"\" | delete";
+				var search7 = new SearchManager(searchQuery7, {tokens: true, tokenNamespace: "submitted"});
+				
+				console.log(e.data['row.Job Name']);
+				console.log(e.data['row.JobTagID']);
+			    splunkjs.mvc.Components.get("search7");
+				search7.on('search:done', function(properties) {
+					console.log("search is done")
+					if (properties.content.resultCount === 0) {
+						console.log("no delete results");
+					}
+					else{
+						console.log("no delete results");
+						              
+					}
+					window.location.reload();
+				});
+				search7.on('search:progress', function(properties) {
+					console.log("search is in progress");
+				});
+				search7.on('search:failed', function(properties) {
+					console.log("search is failed");
+				});
+				
+				search7.startSearch();
+				console.log(" search7 is triggered ")
             }
  });
         
@@ -720,7 +785,7 @@ require([
         
         var input8 = new TimeRangeInput({
             "id": "input8",
-            "default": {"latest_time": null, "earliest_time": "0"},
+            "default": {"latest_time": "now", "earliest_time": "0"},
             "earliest_time": "$form.&nbsp.earliest$",
             "latest_time": "$form.&nbsp.latest$",
             "searchWhenChanged": true,

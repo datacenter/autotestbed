@@ -1,4 +1,4 @@
-- hosts: ansible-node
+- hosts: localhost
   gather_facts: true
   sudo: true
   vars:
